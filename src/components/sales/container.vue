@@ -43,18 +43,16 @@
 
         <v-row class="ma-0">
             <v-spacer/>
-            <v-menu offset-y>
+            <v-menu offset-y :close-on-content-click="closeDatePicker">
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn rounded class="elevation-0 mt-2" color="primary" dark v-bind="attrs" v-on="on">
                         <v-icon class="mr-2" small>mdi-calendar-blank</v-icon>{{selectedPeriod}}
                     </v-btn>
                 </template>
-                <v-list>
-                    <v-list-item v-for="(item, index) in periods" :key="index" @click="filter(item.value)">
-                        <v-list-item-title>{{ item.label }}</v-list-item-title>
-                    </v-list-item>
-                </v-list>
+                <v-date-picker type="month" v-model="selectedPeriod2" range></v-date-picker>
             </v-menu>
+
+
             <v-spacer/>
         </v-row>
         <div v-if="show_pestañita" style="width:calc(100vw - 24px); position:absolute; bottom:0px;">
@@ -134,6 +132,8 @@ export default {
     },
     data(){
         return{
+            selectedPeriod:[],
+            selectedPeriod2:[],
             dialog: false,
             collab:{},
             period:[],
@@ -145,27 +145,48 @@ export default {
             handler(){
                 this.show_pestañita = true
             }, deep: true,
-        }
+        },
+        selectedPeriod2:{
+            handler(){
+                if(this.selectedPeriod2.length==2){
+                    const period = [
+                        new Date(new Date(this.selectedPeriod2[0]+'-15').getFullYear(), new Date(this.selectedPeriod2[0]+'-15').getMonth(), 1).toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 10),
+                        new Date(new Date(this.selectedPeriod2[1]+'-15').getFullYear(), new Date(this.selectedPeriod2[1]+'-15').getMonth() + 1, 0).toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 10)
+                    ]
+                    const ordered_period = period.sort(function(a,b){
+                        return new Date(a) - new Date(b);
+                    });
+                    this.period = [ordered_period[0].toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 10), ordered_period[1].toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 10)]
+                    this.selectedPeriod = this.monthFormat(this.period[0].slice(5, 7)).slice(0, 3) + ' ' + this.period[0].slice(0, 4) + ' - ' + this.monthFormat(this.period[1].slice(5, 7)).slice(0, 3) + ' ' + this.period[1].slice(0, 4)
+                    this.open()
+                    this.$store.dispatch('collab/getCard', {from:this.period[0], to:this.period[1]})
+                    this.$store.dispatch('collab/getCollabs', {date_between:this.period})
+                }
+            }, deep: true,
+        },
     },
     created(){
         var startDate = []
         var date = new Date()
         startDate[0] = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 10)
-        startDate[1] = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 10)
-        this.period = startDate
-        this.$store.dispatch('collab/getCard', {from:this.period[0], to:this.period[1]})
-        this.$store.dispatch('collab/getCollabs', {date_between: this.period})
+
+        startDate[1] = new Date(date.getFullYear(), date.getMonth() + 2, 0).toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 10)
+
+        this.$store.dispatch('collab/getCard', {from:startDate[0], to:startDate[1]})
+        this.$store.dispatch('collab/getCollabs', {date_between: startDate})
+        this.selectedPeriod  = this.monthFormat(startDate[0].slice(5, 7)).slice(0, 3) + ' ' + startDate[0].slice(0, 4) + ' - ' + this.monthFormat(startDate[1].slice(5, 7)).slice(0, 3) + ' ' + startDate[1].slice(0, 4)
     },
     computed:{
-        periods(){
-            
-            return [
-                {label:'Este mes', value:this.startDate(0,1)},
-                {label:'Mes anterior', value:this.startDate(-1,0)},
-                {label:'Hace 2 meses', value:this.startDate(-2,-1)},
-                {label:'Hace 3 meses', value:this.startDate(-3,-2)},
-                {label:'Hace 4 meses', value:this.startDate(-4,-3)},
-            ]
+        closeDatePicker(){
+            if(this.selectedPeriod2!=null){
+                if(this.selectedPeriod2.length==2){
+                    return true
+                }else{
+                    return false
+                }
+            }else{
+                this.selectedPeriod = []
+            }
         },
         loader(){
             return this.$store.state.collab.loading
@@ -181,9 +202,6 @@ export default {
         },
         cardLoader(){
             return this.$store.state.collab.loading_card
-        },
-        selectedPeriod(){
-            return this.periods.filter(item=>JSON.stringify(item.value) == JSON.stringify(this.period)).map(item=>item.label)[0]
         },
     },
     methods: {
@@ -223,12 +241,6 @@ export default {
                 return this.dateFormat(payment_promise_date)
             }
         },
-        filter(period){
-            this.period = period
-            this.open()
-            this.$store.dispatch('collab/getCard', {from:this.period[0], to:this.period[1]})
-            this.$store.dispatch('collab/getCollabs', {date_between:this.period})
-        },
         half () {
             this.$refs.swipeableBottomSheet.setState("half")
         },
@@ -252,5 +264,8 @@ export default {
     }
     .pan-area[data-v-5d6b6420] {
         padding: 12px 0 20px 0!important;
+    }
+    .v-picker__title__btn.v-date-picker-title__date.v-picker__title__btn--active{
+        display: none;
     }
 </style>

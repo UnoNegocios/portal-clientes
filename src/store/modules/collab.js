@@ -15,7 +15,7 @@ const getters = {};
 const actions = {
     getCollabs({ commit, state }, props) {
         commit("setLoading", true);
-        axios.get(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/influencer-collabs?type=detail&filter[influencer_date_between]=" + props.date_between).then(response => {
+        axios.get(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/influencer-collabs?type=detail&filter[influencer_date_between]=" + props.date_between + '&status=vendido').then(response => {
             commit("setCollabs", response.data);
             commit("setLoading", false);
         });
@@ -31,7 +31,7 @@ const actions = {
         commit("setLoadingCards", true);
         axios.get(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/influencer-collabs?type=card&from=" + props.from + "&to=" + props.to).then(response => {
             commit("setCard", response.data);
-            commit("setLoadingCard", false);
+            commit("setLoadingCards", false);
         });
     },
 };
