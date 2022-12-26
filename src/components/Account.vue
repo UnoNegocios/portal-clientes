@@ -49,7 +49,7 @@
                     </template>
                     <v-card class="pa-6">
                         <v-card-title class="px-0 mb-2">Cambiar Contraseña</v-card-title>
-                        <v-text-field v-model="password" label="Nueva Contraseña" outlined style="border-radius:5px;" dense placeholder="Contraseña"></v-text-field>
+                        <v-text-field @click:append="show1 = !show1" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'" v-model="password" label="Nueva Contraseña" outlined style="border-radius:5px;" dense placeholder="Contraseña"></v-text-field>
                         <v-row class="ma-0">
                             <v-spacer/>
                             <v-btn type="submit" @click="savePassword()" class="py-3 peach-button"><strong>Guardar</strong></v-btn>
@@ -76,6 +76,7 @@ export default {
     },  
     data(){
         return{
+            show1: false,
             dialog:false,
             dialog2:false,
             dropzoneOptions: {
