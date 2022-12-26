@@ -36,7 +36,7 @@
             </v-dialog>
             <v-spacer/>
         </v-row>
-        <div class="mt-12 pt-12 px-8" style="text-align:center; height:calc(100vh - 232px)!important; background:white; border-radius: 10px 10px 0px 0px; box-shadow: 0px 10px 20px 10px #00000018!important;">
+        <div class="mt-12 pt-12 px-8" style="text-align:center; height:calc(100vh - 280px)!important; background:white; border-radius: 10px 10px 0px 0px; box-shadow: 0px 10px 20px 10px #00000018!important;">
             <v-text-field v-model="currentUser.name" label="Nombre" outlined style="border-radius:5px;" dense></v-text-field>
             <v-text-field v-model="currentUser.last" label="Apellido" outlined style="border-radius:5px;" dense></v-text-field>
             <v-text-field v-model="currentUser.email" label="Email" outlined style="border-radius:5px;" dense></v-text-field>
