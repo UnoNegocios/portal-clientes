@@ -8,9 +8,11 @@
             </v-btn>
             <div style="font-weight:500; font-size:25px;">Hola {{currentUser.name}}</div>
             <v-spacer/>
-            <v-avatar size="36px" class="mr-1">
-                <img src="/avatar.png" >
-            </v-avatar>
+            <a href="/account">
+                <v-avatar size="36px" class="mr-1">
+                    <img src="/avatar.png" >
+                </v-avatar>
+            </a>
         </v-row>
         <v-card class="mt-4 px-6 pt-6 pb-3 elevation-0" style="background:black; border-radius:10px; background-image:url('/bg-2.png'); background-size: cover;" dark>
             
