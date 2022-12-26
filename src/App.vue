@@ -2,12 +2,36 @@
   <v-app>
     <app v-if="token!=null"></app>
     <login v-else></login>
-    <v-snackbar top :value="updateExists" color="primary" timeout="999999999" style="margin-top:-72px;" content-class="py-1"><!--updateExists-->
-      <span style="font-size:16px;">Hay una actualización disponible!</span>
-      <v-btn class="ml-4 elevation-0" small style="margin-top:-4px;" color="white" light @click="refreshApp">
-        Actualizar
-      </v-btn>
-    </v-snackbar>
+    <v-dialog top color="primary" timeout="999999999" :value="updateExists" persistent><!-- :value="updateExists" -->
+      <v-card class="py-4">
+        <v-row class="ma-0">
+          <v-spacer/>
+          <span style="font-size:16px;">Hay una actualización disponible!</span>
+          <v-spacer/>
+        </v-row>
+        <v-row class="ma-0 mt-4">
+          <v-spacer/>
+          <v-btn class="ml-4 elevation-0" small style="margin-top:-4px;" color="primary" @click="refreshApp">
+            Actualizar
+          </v-btn>
+          <v-spacer/>
+        </v-row>
+      </v-card>
+    </v-dialog>
+    <!--v-snackbar top color="primary" timeout="999999999" :value="updateExists" content-class="py-2">
+      <v-row class="ma-0">
+        <v-spacer/>
+        <span style="font-size:16px;">Hay una actualización disponible!</span>
+        <v-spacer/>
+      </v-row>
+      <v-row class="ma-0 mt-2">
+        <v-spacer/>
+        <v-btn class="ml-4 elevation-0" small style="margin-top:-4px;" color="white" light @click="refreshApp">
+          Actualizar
+        </v-btn>
+        <v-spacer/>
+      </v-row>
+    </v-snackbar-->
   </v-app>
 </template>
 
