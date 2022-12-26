@@ -1,7 +1,7 @@
 <template>
     <v-container class="pa-0">
         <v-row class="ma-0 py-2 px-2">
-            <v-btn icon><v-icon>mdi-chevron-left</v-icon></v-btn>
+            <v-btn @click="$router.go(-1)" icon><v-icon>mdi-chevron-left</v-icon></v-btn>
             <v-spacer/>
             <v-btn @click="save()" color="primary" class="mt-1" small text>guardar</v-btn>
         </v-row>
