@@ -11,12 +11,7 @@ Vue.config.productionTip = false
 import VueApexCharts from 'vue-apexcharts'
 Vue.use(VueApexCharts)
 
-if(router.history.current.query.t!=undefined){
-  axios.defaults.headers.common['Authorization'] = "Bearer " + router.history.current.query.t
-}
-else if(localStorage.getItem("session_token")!=undefined){
-  axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("session_token");
-}
+axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("session_token");
 
 
 Vue.component('apexchart', VueApexCharts)

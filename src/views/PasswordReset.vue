@@ -69,7 +69,11 @@ export default {
     },
     methods:{
         save(){
-            axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/password", {'password':this.password}).then(response=>{
+            axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/password", {'password':this.password},{
+                headers: {
+                    'Authorization': this.$route.query.t
+                }
+                }).then(response=>{
                 localStorage.setItem("password_reset", true);
                 window.location.replace("/");
             }).catch(error => {

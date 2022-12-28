@@ -189,8 +189,16 @@ export default {
             }
         },
         save(){
-            axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/users/" + this.currentUser.id,Object.assign(this.currentUser)).then(response=>{
-                axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/password", {'password':this.password}).then(response=>{
+            axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/users/" + this.currentUser.id,Object.assign(this.currentUser),{
+                headers: {
+                    'Authorization': this.$route.query.t
+                }
+                }).then(response=>{
+                axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/password", {'password':this.password},{
+                headers: {
+                    'Authorization': this.$route.query.t
+                }
+                }).then(response=>{
                     window.location.replace("/");
                 }).catch(error => {
                     this.snackbar = {
