@@ -85,7 +85,7 @@ export default {
       return localStorage.getItem("first_login")
     },
   },
-  created(){
+  mounted(){
     setTimeout(() => {
       localStorage.removeItem("password_reset")
     }, 2000);
@@ -107,10 +107,8 @@ export default {
         localStorage.removeItem("first_login")
       }, 2000);
     }
-  },
-  mounted(){
     axios.get(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/current").catch(error => {
-      //localStorage.removeItem("session_token");
+      localStorage.removeItem("session_token");
       this.token = null
     });
   },
