@@ -1,7 +1,12 @@
 <template>
     <v-container style="max-width:100vw;" class="mb-6">
         <v-row class="ma-0 pa-0" >
-            <v-card-title>Documentos</v-card-title>
+            <v-spacer/>
+            <v-card-title class="px-0">Documentos</v-card-title>
+            <v-spacer/>
+        </v-row>
+        <v-row class="ma-0 pa-0" style="position:absolute!important; top:13px;">
+            <v-btn class="mr-2 pt-7" to='/' icon><v-icon>mdi-chevron-left</v-icon></v-btn>
         </v-row>
         <!--v-card v-for="(card, index) in cards" :key="index" class="py-4 px-6 mb-4 elevation-0">
 

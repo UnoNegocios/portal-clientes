@@ -1,7 +1,12 @@
 <template>
   <v-container>
     <v-row class="ma-0 pa-0" >
+        <v-spacer/>
         <v-card-title class="px-0">Próximos Eventos</v-card-title>
+        <v-spacer/>
+    </v-row>
+    <v-row class="ma-0 pa-0" style="position:absolute!important; top:13px;">
+        <v-btn class="mr-2 pt-7" to='/' icon><v-icon>mdi-chevron-left</v-icon></v-btn>
     </v-row>
     <div v-if="events.length>0">
     <v-card v-for="(event, index) in events" :key="index" class="py-4 px-6 mb-4 elevation-0" @click="openDetail(event)">
