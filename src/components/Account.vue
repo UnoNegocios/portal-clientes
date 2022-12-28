@@ -7,7 +7,7 @@
         </v-row>
         <v-row class="ma-0 my-12">
             <v-spacer/>
-            <v-dialog v-model="dialog" width="325">
+            <v-dialog v-model="dialog" width="90vw">
                 <template v-slot:activator="{ on, attrs }">
                     <div v-bind="attrs" v-on="on">
                         <v-badge bordered color="primary" icon="mdi-camera" overlap avatar offset-x="20" offset-y="90">
@@ -24,8 +24,7 @@
                         :options="dropzoneOptions" 
                         v-on:vdropzone-success="uploadSuccess" 
                         v-on:vdropzone-error="uploadError" 
-                        v-on:vdropzone-removed-file="fileRemoved"
-                        v-if="fileName==''"/>
+                        v-on:vdropzone-removed-file="fileRemoved"/>
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="primary" text @click="save()">Guardar</v-btn>
@@ -145,6 +144,7 @@ export default {
         },
         save(){
             axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/users/" + this.currentUser.id,Object.assign(this.currentUser)).then(response=>{
+                this.dialog = false
                 this.$store.dispatch('currentUser/getUser')
                 this.snackbar = {
                     message: 'Cambio realizado con éxito',
@@ -179,9 +179,9 @@ export default {
 
         uploadSuccess(file, response) {
             console.log('File Successfully Uploaded with file name: ' + response.file);
-            this.fileName = response.file
+            this.fileName = 'https://unopack.mx/files/'+response.file
             this.currentUser.profile_photo_path = this.fileName
-            this.index = this.index+1
+            console.log(this.currentUser.profile_photo_path)
         },
         uploadError(file, message) {
             this.snackbar2 = {
@@ -191,7 +191,7 @@ export default {
             }
         },
         fileRemoved(file) {
-            this.currentUser.profile_photo_path = ''
+            
         },
         required: function(value) {
             if (value) {
@@ -225,5 +225,8 @@ export default {
     border-radius: 5px;
     background: #cc82eb!important;
     color: black!important;
+}
+.dropzone .dz-preview {
+    max-width: 68vw!important;
 }
 </style>
