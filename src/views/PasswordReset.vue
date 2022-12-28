@@ -71,7 +71,7 @@ export default {
         save(){
             axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/password", {'password':this.password},{
                 headers: {
-                    'Authorization': this.$route.query.t
+                    'Authorization': "Bearer " + this.$route.query.t
                 }
                 }).then(response=>{
                 localStorage.setItem("password_reset", true);
