@@ -1,4 +1,5 @@
 import axios from "axios";
+import router from '../../router';
 const state = {
   user: {},
   error:{
@@ -14,8 +15,18 @@ const state = {
 const getters = {};
 const actions = {
   getUser({ commit }) {
+    if(router.history.current.query.t!=undefined){
+      var token = "Bearer " + router.history.current.query.t
+    }
+    else if(localStorage.getItem("session_token")!=undefined){
+      var token = "Bearer " + localStorage.getItem("session_token");
+    }
     axios.get(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/current", 
-    
+    {
+      headers: {
+        'Authorization': token
+      }
+    }
     ).then(response => {
       commit("setUser", response.data.data);
     });

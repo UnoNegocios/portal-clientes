@@ -110,7 +110,7 @@ export default {
   },
   mounted(){
     axios.get(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/current").catch(error => {
-    localStorage.removeItem("session_token");
+    //localStorage.removeItem("session_token");
       this.token = null
     });
   },
