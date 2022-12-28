@@ -1,7 +1,7 @@
 <template>
     <v-container class="pa-0">
         <v-row class="ma-0 py-2 px-2">
-            <v-btn @click="$router.go(-1)" icon><v-icon>mdi-chevron-left</v-icon></v-btn>
+            <v-btn to='/' icon><v-icon>mdi-chevron-left</v-icon></v-btn>
             <v-spacer/>
             <v-btn @click="save()" color="primary" class="mt-1" small text>guardar</v-btn>
         </v-row>
@@ -12,7 +12,7 @@
                     <div v-bind="attrs" v-on="on">
                         <v-badge bordered color="primary" icon="mdi-camera" overlap avatar offset-x="20" offset-y="90">
                             <v-avatar size="100px">
-                                <v-img alt="user" :src="currentUser.profile_photo_url"></v-img>
+                                <v-img alt="user" :src="currentUser.profile_photo_path"></v-img>
                             </v-avatar>
                         </v-badge>
                     </div>
@@ -24,15 +24,13 @@
                         :options="dropzoneOptions" 
                         v-on:vdropzone-success="uploadSuccess" 
                         v-on:vdropzone-error="uploadError" 
-                        v-on:vdropzone-removed-file="fileRemoved"/>
+                        v-on:vdropzone-removed-file="fileRemoved"
+                        v-if="fileName==''"/>
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="primary" text @click="save()">Guardar</v-btn>
                     </v-card-actions>
                 </v-card>
-                <v-snackbar :color="snackbar.color" v-model="snackbar.show">
-                    {{ snackbar.message }}
-                </v-snackbar>
             </v-dialog>
             <v-spacer/>
         </v-row>
@@ -41,28 +39,57 @@
             <v-text-field v-model="currentUser.last" label="Apellido" outlined style="border-radius:5px;" dense></v-text-field>
             <v-text-field v-model="currentUser.email" label="Email" outlined style="border-radius:5px;" dense></v-text-field>
             <v-text-field v-model="currentUser.phone" label="Teléfono" outlined style="border-radius:5px;" dense></v-text-field>
-            <v-row class="my-1" v-if="!editPassword">
+            <v-row class="my-1">
                 <v-spacer/>
                 <v-dialog v-model="dialog2" width="325">
-                    <template v-slot:activator="{ on, attrs }">
+                    <template v-slot:activator="{ on, attrs }" v-if="!editPassword">
                         <a v-bind="attrs" v-on="on">Cambiar contraseña</a>
                     </template>
                     <v-card class="pa-6">
                         <v-card-title class="px-0 mb-2">Cambiar Contraseña</v-card-title>
-                        <v-text-field @click:append="show1 = !show1" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'" v-model="password" label="Nueva Contraseña" outlined style="border-radius:5px;" dense placeholder="Contraseña"></v-text-field>
-                        <v-row class="ma-0">
+
+                        <v-text-field
+                             outlined style="border-radius:5px;" dense
+                            :type="show ? 'text' : 'password'"
+                            v-model="password"
+                            label="Contraseña"
+                            :rules="[required, min8]"
+                            :counter="8">
+                            <template v-slot:append>
+                                <v-icon class="mt-1" small @click="show = !show" v-if="show">mdi-eye</v-icon>
+                                <v-icon class="mt-1" small @click="show = !show" v-if="!show">mdi-eye-off</v-icon>
+                            </template>
+                        </v-text-field>
+                        <!-- password1 -->
+                        <v-text-field
+                             outlined style="border-radius:5px;" dense
+                            :type="show1 ? 'text' : 'password'"
+                            v-model="password1"
+                            label="Verificar Contraseña"
+                            :rules="[required, min8, matchingPasswords ]"
+                            :counter="8">
+                            <template v-slot:append>
+                                <v-icon class="mt-1" small @click="show1 = !show1" v-if="show1">mdi-eye</v-icon>
+                                <v-icon class="mt-1" small @click="show1 = !show1" v-if="!show1">mdi-eye-off</v-icon>
+                            </template>
+                        </v-text-field>
+                        
+                        <v-row class="ma-0 mt-6">
                             <v-spacer/>
-                            <v-btn type="submit" @click="savePassword()" class="py-3 peach-button"><strong>Guardar</strong></v-btn>
+                            <v-btn type="submit" @click="savePassword()" class="py-3 peach-button" :disabled="!(this.min8(this.password1) === true && this.matchingPasswords() === true)"><strong>Guardar</strong></v-btn>
                         </v-row>    
                     </v-card>
                 </v-dialog>
                 <v-spacer/>
             </v-row>
-            <v-btn bottom fixed style="margin-bottom:90px; margin-left:calc(50vw - 100px); color:grey;" left class="elevation-0" color="white">
+            <v-btn @click="logout()" bottom fixed style="margin-bottom:90px; margin-left:calc(50vw - 100px); color:grey;" left class="elevation-0" color="white">
                 <v-icon>mdi-exit-to-app</v-icon>
                 Cerrar Sesión
             </v-btn>
         </div>
+        <v-snackbar :color="snackbar.color" v-model="snackbar.show" bottom style="margin-bottom:100px;">
+            {{ snackbar.message }}
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -76,6 +103,8 @@ export default {
     },  
     data(){
         return{
+            fileName:'',
+            show: false,
             show1: false,
             dialog:false,
             dialog2:false,
@@ -83,7 +112,7 @@ export default {
                 url: process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/photo",
                 addRemoveLinks: true,
                 maxFiles: 1,
-                thumbnailWidth: 250,
+                thumbnailWidth: 500,
                 dictDefaultMessage: 'Haz clic aquí o arrastra una imagen.',
                 dictFallbackMessage: "Tu navegador no puede subir archivos arrastarndolos a la pantalla.",
                 dictFileTooBig: "File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB.",
@@ -95,6 +124,9 @@ export default {
             },
             editPassword:false,
             password:'',
+            password1:'',
+            successPass: false,
+            successPass1: false,
             snackbar: {
                 show: false,
                 message: null,
@@ -108,8 +140,11 @@ export default {
         },
     },
     methods:{
+        logout(){
+            this.$store.dispatch('currentUser/logoutUser')
+        },
         save(){
-            axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/" + this.currentUser.id,Object.assign(this.currentUser)).then(response=>{
+            axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/users/" + this.currentUser.id,Object.assign(this.currentUser)).then(response=>{
                 this.$store.dispatch('currentUser/getUser')
                 this.snackbar = {
                     message: 'Cambio realizado con éxito',
@@ -145,7 +180,7 @@ export default {
         uploadSuccess(file, response) {
             console.log('File Successfully Uploaded with file name: ' + response.file);
             this.fileName = response.file
-            this.currentUser.avatar = this.fileName
+            this.currentUser.profile_photo_path = this.fileName
             this.index = this.index+1
         },
         uploadError(file, message) {
@@ -156,7 +191,28 @@ export default {
             }
         },
         fileRemoved(file) {
-            this.currentUser.avatar = ''
+            this.currentUser.profile_photo_path = ''
+        },
+        required: function(value) {
+            if (value) {
+                return true;
+            } else {
+                return 'Este campo es obligatorio.';
+            }
+        },
+        min8: function(value) {
+            if (value.length >= 8) {
+                return true;
+            } else {
+                return 'La contraseña debe tener más de 8 caracteres.';
+            }
+        },
+        matchingPasswords: function() {
+            if (this.password === this.password1) {
+                return true;
+            } else {
+                return 'Las contraseñas no coinciden.';
+            }
         },
     }
 }

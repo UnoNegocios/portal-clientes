@@ -15,6 +15,8 @@ axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getIte
 
 Vue.component('apexchart', VueApexCharts)
 
+
+
 new Vue({
   router,
   store,

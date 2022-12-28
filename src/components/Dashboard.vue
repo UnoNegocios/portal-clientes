@@ -1,16 +1,16 @@
 <template>
     <v-container class="mb-12 pb-12">
         <v-row class="ma-0 py-1">
-            <v-btn icon class="mr-4">
+            <!--v-btn icon class="mr-4">
                 <v-icon>
                     mdi-menu
                 </v-icon>
-            </v-btn>
+            </v-btn-->
             <div style="font-weight:500; font-size:25px;">Hola {{currentUser.name}}</div>
             <v-spacer/>
             <a href="/account">
                 <v-avatar size="36px" class="mr-1">
-                    <img src="/avatar.png" >
+                    <img :src="currentUser.profile_photo_path" >
                 </v-avatar>
             </a>
         </v-row>

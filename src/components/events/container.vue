@@ -3,6 +3,7 @@
     <v-row class="ma-0 pa-0" >
         <v-card-title class="px-0">Próximos Eventos</v-card-title>
     </v-row>
+    <div v-if="events.length>0">
     <v-card v-for="(event, index) in events" :key="index" class="py-4 px-6 mb-4 elevation-0" @click="openDetail(event)">
         <v-card-title style="font-size:18px;" class="ma-0 pa-0">{{event.title}}</v-card-title>
         <v-chip class="mx-0 mb-2 mt-0" dark x-small :color="event.activity_type.color" style="font-weight:500; border-radius:3px;">{{event.activity_type.name}}</v-chip>
@@ -31,6 +32,14 @@
             
         </v-card>
     </v-dialog>
+    </div>
+    <div v-else style="text-align:center; filter:opacity(.5);" class="mt-12 pt-12">
+        No hay eventos aún
+        <br/>
+        <br/>
+        <span style="font-size:100px;">{{':('}}</span>
+    </div>
+    
   </v-container>
 </template>
 
