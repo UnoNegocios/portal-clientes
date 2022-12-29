@@ -153,10 +153,7 @@
 </template>
 
 <script>
-const password1 = document.getElementById('password1');
-password1.tabIndex = '-1';
-const password2 = document.getElementById('password2');
-password2.blur();
+
 
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
@@ -257,6 +254,12 @@ export default {
             }
         },
     },
+    mounted(){
+        const password1 = document.getElementById('password1');
+        password1.tabIndex = '-1';
+        const password2 = document.getElementById('password2');
+        password2.blur();
+    }
   }
 </script>
 <style>
