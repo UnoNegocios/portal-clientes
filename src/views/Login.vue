@@ -1,11 +1,11 @@
 <template>
-  <v-stepper v-model="currentSlide">
+  <v-stepper v-model="currentSlide" style="background-color:#f4f5fa!important;">
       <v-stepper-items>
         <v-stepper-content step="login" class="pa-0">
 
 
 
-          <v-container class="ma-0 pa-0" style="max-width: 100vw; background-color:#f4f5fa; background:url('/background.png'); background-size: contain; font-family: Poppins!important;">
+          <v-container class="ma-0 pa-0" style="max-width: 100vw;  background:url('/background.png'); background-size: contain; font-family: Poppins!important;">
 
             <v-container class="fill-height pa-0" fluid style="min-height:100vh;">
               
@@ -148,7 +148,7 @@ export default {
     }
   },
   mounted(){
-    if(currentSlide=='login'){
+    if(this.currentSlide=='login'){
       document.documentElement.className = 'light-theme'
     }else{
       document.documentElement.className = 'dark-theme'
