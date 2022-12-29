@@ -71,7 +71,7 @@
                 </v-dialog>
                 <v-spacer/>
             </v-row>
-            <v-btn @click="logout()" bottom fixed style="margin-bottom:90px; margin-left:calc(50vw - 100px); color:grey;" left class="elevation-0" color="white">
+            <v-btn @click="logout()" bottom absolute style="margin-bottom:90px; margin-left:calc(50vw - 100px); color:grey;" left class="elevation-0" color="white">
                 <v-icon>mdi-exit-to-app</v-icon>
                 Cerrar Sesión
             </v-btn>

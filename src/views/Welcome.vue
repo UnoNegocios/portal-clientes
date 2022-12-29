@@ -8,14 +8,23 @@
     <v-stepper-items>
       <v-stepper-content step="1" style="height:calc(100vh - 160px);">
 
-        <v-card-title>Bienvenido(a) <strong class="ml-2">{{currentUser.name}}</strong></v-card-title>
+        <v-card-title>
+            <v-spacer class="hidden-md-and-down"/>
+            Bienvenido(a) <strong class="ml-2">{{currentUser.name}}</strong>
+            <v-spacer class="hidden-md-and-down"/>
+        </v-card-title>
 
-        <img style="width:100%;" src="/monita2.png"/>
+        <v-row class="ma-0">
+            <v-spacer/>
+            <img class="image1" src="/monita2.png"/>
+            <v-spacer/>
+        </v-row>
 
-        <v-card-title class="my-0 py-0 mt-2" style="font-weight: bold; font-size: 8vw;">Configura tu perfil</v-card-title>
-        <v-card-title class="my-0 py-0 pt-3" style="font-weight: bold; font-size: 8vw;">para comenzar</v-card-title>
-
-        <v-card-subtitle class="mt-4" style="color:grey!important; font-size: 20px;">Estas a solo unos pasos</v-card-subtitle>
+        <v-card-title class="my-0 py-0 mt-2" style="font-weight: bold; font-size: 30px;"><v-spacer class="hidden-md-and-down"/>Configura tu perfil<v-spacer class="hidden-md-and-down"/></v-card-title>
+        <v-card-title class="my-0 py-0 pt-3" style="font-weight: bold; font-size: 30px;"><v-spacer class="hidden-md-and-down"/>para comenzar<v-spacer class="hidden-md-and-down"/></v-card-title>
+<v-spacer class="hidden-md-and-down"/>
+        <v-card-subtitle class="mt-4 hidden-md-and-up" style="color:grey!important; font-size: 20px;">Estas a solo unos pasos</v-card-subtitle>
+        <v-card-subtitle class="mt-4 hidden-md-and-down" style="color:grey!important; font-size: 20px; text-align:center;">Estas a solo unos pasos</v-card-subtitle>
 
       </v-stepper-content>
 
@@ -23,10 +32,14 @@
 
             <v-card-title class="px-0"><v-spacer/>Configura tu Contraseña<v-spacer/></v-card-title>
 
-            <img style="width:100%; padding:50px;" class="mb-4" src="/password-monita.png"/>
+            <v-row class="ma-0 mb-6">
+                <v-spacer/>
+                <img class="image2" src="/password-monita.png"/>
+                <v-spacer/>
+            </v-row>
 
             <v-text-field
-                outlined style="border-radius:5px;" 
+                outlined style="border-radius:5px; max-width:500px; margin:auto;" 
                 dense
                 :type="show ? 'text' : 'password'"
                 v-model="password"
@@ -40,7 +53,7 @@
             </v-text-field>
             <!-- password1 -->
             <v-text-field
-                    outlined style="border-radius:5px;" dense
+                    outlined style="border-radius:5px; max-width:500px; margin:auto;" dense
                 :type="show1 ? 'text' : 'password'"
                 v-model="password1"
                 label="Verificar Contraseña"
@@ -58,7 +71,7 @@
         <v-row class="ma-0 my-12">
             <v-spacer/>
                 <v-badge bordered color="primary" icon="mdi-camera" overlap avatar offset-x="20" offset-y="150">
-                    <v-avatar size="50vw" @click="$refs.image.$refs.input.click()">
+                    <v-avatar size="190px" @click="$refs.image.$refs.input.click()">
                         <v-img alt="user" :src="currentUser.profile_photo_path"></v-img>
                     </v-avatar>
                 </v-badge>
@@ -247,5 +260,19 @@ export default {
 }
 .vue-dropzone {
     border: 2px solid #ffffff!important;
+}
+.image1{
+    width: 90%;
+}
+.image2{
+    width: 50%;
+}
+@media(min-width: 980px){
+    .image1{
+        width: 20vw;
+    }
+    .image2{
+        width: 20vw;
+    }  
 }
 </style>
