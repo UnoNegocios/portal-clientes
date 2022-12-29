@@ -2,7 +2,7 @@
 
  
 const cacheName = 'Peach Agency';
-const startPage = 'httpss://influencerpeach.unocrm.mx';
+const startPage = 'https://influencerpeach.unocrm.mx';
 const offlinePage = '/offline.html';
 const filesToCache = [startPage, offlinePage];
 const neverCacheUrls = [];
