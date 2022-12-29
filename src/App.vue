@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app :class="noScroll">
     <password-reset v-if="$route.query.password_reset!=undefined"></password-reset>
     <welcome v-else-if="$route.query.t!=undefined"></welcome>
     <app v-else-if="token!=null"></app>
@@ -78,6 +78,11 @@ export default {
     }
   },
   computed:{
+    noScroll(){
+      if(this.$route.query.t!=undefined){
+        return 'no-scroll'
+      }
+    },
     password_reset(){
       return localStorage.getItem("password_reset");
     },
@@ -123,5 +128,8 @@ export default {
 }
 body{
     touch-action: manipulation;
+}
+.no-scroll{
+  overflow: hidden !important;
 }
 </style>
