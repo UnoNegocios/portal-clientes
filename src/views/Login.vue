@@ -5,7 +5,7 @@
 
 
 
-          <v-container class="ma-0 pa-0" style="max-width: 100vw; background:url('/background.png'); background-size: contain; font-family: Poppins!important;">
+          <v-container class="ma-0 pa-0" style="max-width: 100vw; background-color:#f4f5fa; background:url('/background.png'); background-size: contain; font-family: Poppins!important;">
 
             <v-container class="fill-height pa-0" fluid style="min-height:100vh;">
               
@@ -24,7 +24,7 @@
                   <v-card-text class="px-0 pb-0">
                     <v-form>
                       <v-text-field 
-                      style="background:white;"
+                      style="background:#f4f5fa;"
                       :rules="[rules.required, rules.email]"
                       @keydown.enter="login" 
                       label="Email" 
@@ -33,7 +33,7 @@
                       v-model="user.email" 
                       outlined></v-text-field>
                       <v-text-field 
-                      style="background:white;"
+                      style="background:#f4f5fa;"
                       :rules="[rules.required]"
                       :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                       :type="show1 ? 'text' : 'password'"
@@ -145,6 +145,13 @@ export default {
     },
     reset(){
       return this.$store.state.currentUser.reset
+    }
+  },
+  mounted(){
+    if(currentSlide=='login'){
+      document.documentElement.className = 'light-theme'
+    }else{
+      document.documentElement.className = 'dark-theme'
     }
   },
   methods:{

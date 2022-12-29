@@ -1,5 +1,5 @@
 <template>
-  <v-stepper v-model="currentSlide" style="height:100vh;">
+  <v-stepper v-model="currentSlide" style="height:100vh; background-color:#f4f5fa;">
     <!--v-row class="ma-0 py-8">
         <v-row/>
         <img style="width:80px;" src="/logo.png"/>
@@ -89,7 +89,7 @@
 
 
 
-        <v-list>
+        <v-list style="background:#f4f5fa;">
             <v-list-item style="font-size: 20px; font-weight: 500;">
                 <v-spacer/>
                 {{currentUser.name + ' ' + currentUser.last}}
