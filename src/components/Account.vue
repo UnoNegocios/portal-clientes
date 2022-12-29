@@ -113,7 +113,7 @@ export default {
         imageData:{
             handler(){     
                 let formData = new FormData();
-                formData.append('file', this.imageData);
+                formData.append('image', this.imageData);
                 axios.post(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/photo"
                     ,formData
                     ,{headers: {"Content-Type": "multipart/form-data"}}
