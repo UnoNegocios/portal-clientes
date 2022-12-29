@@ -118,7 +118,7 @@ export default {
                     ,formData
                     ,{headers: {"Content-Type": "multipart/form-data"}}
                 ).then(response=>{
-                    this.currentUser.profile_photo_path = 'https://unopack.mx/files/' + response.data.file
+                    this.currentUser.profile_photo_path = 'https://unopack.mx/files/thumbnail/' + response.data.file
                     this.$nextTick(() => {this.save()})
                 })
             },deep:true,
