@@ -121,4 +121,7 @@ export default {
 .v-application {
     font-family: Poppins!important;
 }
+.disable-dbl-tap-zoom {
+  touch-action: manipulation;
+}
 </style>

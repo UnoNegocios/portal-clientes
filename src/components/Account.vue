@@ -3,7 +3,7 @@
         <v-row class="ma-0 py-2 px-2">
             <v-btn to='/' icon><v-icon>mdi-chevron-left</v-icon></v-btn>
             <v-spacer/>
-            <v-btn @click="save()" color="primary" class="mt-1" small text>guardar</v-btn>
+            <v-btn @click="save()" :disabled="disabled_button" :loading="loader_button" color="primary" class="mt-1" small text>guardar</v-btn>
         </v-row>
         <v-row class="ma-0 my-12">
             <v-spacer/>
@@ -87,6 +87,8 @@ import axios from "axios";
 export default {
     data(){
         return{
+            loader_button:false,
+            disabled_button:true,
             imageData:'',
             fileName:'',
             show: false,
@@ -106,10 +108,17 @@ export default {
     },
     computed:{
         currentUser(){
-            return this.$store.state.currentUser.user
+            var user = this.$store.state.currentUser.user
+            this.original_user = user
+            return user
         },
     },
     watch:{
+        currentUser:{
+            handler(){
+                this.disabled_button = false
+            },deep: true
+        },
         imageData:{
             handler(){     
                 let formData = new FormData();
@@ -130,9 +139,10 @@ export default {
             this.$store.dispatch('currentUser/logoutUser')
         },
         save(){
+            this.loader_button = true
             axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/users/" + this.currentUser.id,Object.assign(this.currentUser)).then(response=>{
-                this.dialog = false
-                this.$store.dispatch('currentUser/getUser')
+                this.disabled_button = true
+                this.loader_button = false
                 this.snackbar = {
                     message: 'Cambio realizado con éxito',
                     color: 'success',
