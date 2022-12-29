@@ -1,5 +1,5 @@
 <template>
-  <v-stepper v-model="currentSlide" style="height:100vh; background-color:#f4f5fa; overflow: hidden">
+  <v-stepper v-model="currentSlide" style="height:100vh; background-color:#f4f5fa;" class="no-overflow">
     <!--v-row class="ma-0 py-8">
         <v-row/>
         <img style="width:80px;" src="/logo.png"/>
@@ -277,5 +277,8 @@ export default {
         width: 15vw;
         margin:20px;
     }  
+}
+.no-overflow{
+    overflow: hidden!important;
 }
 </style>
