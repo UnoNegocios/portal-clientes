@@ -39,6 +39,7 @@
             </v-row>
 
             <v-text-field
+                id="password1"
                 outlined style="border-radius:5px; max-width:500px; margin:auto;" 
                 dense
                 :type="show ? 'text' : 'password'"
@@ -53,6 +54,7 @@
             </v-text-field>
             <!-- password1 -->
             <v-text-field
+                id="password2"
                     outlined style="border-radius:5px; max-width:500px; margin:auto;" dense
                 :type="show1 ? 'text' : 'password'"
                 v-model="password1"
@@ -249,6 +251,12 @@ export default {
                 return 'Las contraseñas no coinciden.';
             }
         },
+    },
+    mounted(){
+        const password1 = document.getElementById('password1');
+        password1.tabIndex = '-1';
+        const password2 = document.getElementById('password2');
+        password2.tabIndex = '-1';
     }
   }
 </script>
