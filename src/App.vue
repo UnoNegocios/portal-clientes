@@ -130,6 +130,6 @@ body{
     touch-action: manipulation;
 }
 .no-scroll{
-  overflow: hidden !important;
+  height:50vh!important;
 }
 </style>
