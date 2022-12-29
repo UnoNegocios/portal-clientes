@@ -1,7 +1,7 @@
 import axios from "axios";
 import router from '../../router';
 const state = {
-  user: {},
+  user: '',
   error:{
     show:false,
     message:''

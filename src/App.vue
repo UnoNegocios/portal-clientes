@@ -1,5 +1,5 @@
 <template>
-  <v-app class="disable-dbl-tap-zoom">
+  <v-app>
     <password-reset v-if="$route.query.password_reset!=undefined"></password-reset>
     <welcome v-else-if="$route.query.t!=undefined"></welcome>
     <app v-else-if="token!=null"></app>
@@ -121,7 +121,7 @@ export default {
 .v-application {
     font-family: Poppins!important;
 }
-.disable-dbl-tap-zoom {
-  touch-action: manipulation;
+body{
+    touch-action: manipulation;
 }
 </style>

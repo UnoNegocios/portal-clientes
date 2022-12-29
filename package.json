@@ -1,6 +1,6 @@
 {
   "name": "PEACH",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "private": true,
   "scripts": {
     "serve": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service  serve",

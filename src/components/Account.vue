@@ -115,8 +115,13 @@ export default {
     },
     watch:{
         currentUser:{
-            handler(){
-                this.disabled_button = false
+            handler(newVal, oldVal){
+                console.log(oldVal)
+                console.log(newVal)
+                if(oldVal!=''){
+                    console.log('perro')
+                    this.disabled_button = false
+                }
             },deep: true
         },
         imageData:{
