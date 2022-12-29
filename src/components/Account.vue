@@ -7,30 +7,20 @@
         </v-row>
         <v-row class="ma-0 my-12">
             <v-spacer/>
-            <v-dialog v-model="dialog" width="90vw">
-                <template v-slot:activator="{ on, attrs }">
-                    <div v-bind="attrs" v-on="on">
+                    <a @click="$refs.image.$refs.input.click()">
                         <v-badge bordered color="primary" icon="mdi-camera" overlap avatar offset-x="20" offset-y="90">
                             <v-avatar size="100px">
                                 <v-img alt="user" :src="currentUser.profile_photo_path"></v-img>
                             </v-avatar>
                         </v-badge>
-                    </div>
-                </template>
-                <v-card>
-                    <vue-dropzone 
-                        ref="myVueDropzone" 
-                        id="dropzone" 
-                        :options="dropzoneOptions" 
-                        v-on:vdropzone-success="uploadSuccess" 
-                        v-on:vdropzone-error="uploadError" 
-                        v-on:vdropzone-removed-file="fileRemoved"/>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="primary" text @click="save()">Guardar</v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
+                    </a>
+                    <v-file-input
+                        style="display:none!important;"
+                        hide-input
+                        ref="image"
+                        accept="image/*"
+                        v-model="imageData"
+                    ></v-file-input>
             <v-spacer/>
         </v-row>
         <div class="mt-12 pt-12 px-8" style="text-align:center; height:calc(100vh - 280px)!important; background:white; border-radius: 10px 10px 0px 0px; box-shadow: 0px 10px 20px 10px #00000018!important;">
@@ -93,34 +83,15 @@
 </template>
 
 <script>
-import vue2Dropzone from "vue2-dropzone";
-import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import axios from "axios";
 export default {
-    components: {
-        vueDropzone: vue2Dropzone,
-    },  
     data(){
         return{
+            imageData:'',
             fileName:'',
             show: false,
             show1: false,
-            dialog:false,
             dialog2:false,
-            dropzoneOptions: {
-                url: process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/photo",
-                addRemoveLinks: true,
-                maxFiles: 1,
-                thumbnailWidth: 500,
-                dictDefaultMessage: 'Haz clic aquí o arrastra una imagen.',
-                dictFallbackMessage: "Tu navegador no puede subir archivos arrastarndolos a la pantalla.",
-                dictFileTooBig: "File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB.",
-                dictInvalidFileType: "No puede cargar archivos de este tipo.",
-                dictCancelUpload: "Cancelar carga",
-                dictCancelUploadConfirmation: "Estás seguro de que deseas cancelar esta carga?",
-                dictRemoveFile: "Eliminar",
-                dictMaxFilesExceeded: "No puedes subir más archivos.",
-            },
             editPassword:false,
             password:'',
             password1:'',
@@ -137,6 +108,21 @@ export default {
         currentUser(){
             return this.$store.state.currentUser.user
         },
+    },
+    watch:{
+        imageData:{
+            handler(){     
+                let formData = new FormData();
+                formData.append('file', this.imageData);
+                axios.post(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/photo"
+                    ,formData
+                    ,{headers: {"Content-Type": "multipart/form-data"}}
+                ).then(response=>{
+                    this.currentUser.profile_photo_path = 'https://unopack.mx/files/' + response.data.file
+                    this.$nextTick(() => {this.save()})
+                })
+            },deep:true,
+        }
     },
     methods:{
         logout(){
@@ -175,23 +161,6 @@ export default {
                     show: true
                 }
             })
-        },
-
-        uploadSuccess(file, response) {
-            console.log('File Successfully Uploaded with file name: ' + response.file);
-            this.fileName = 'https://unopack.mx/files/'+response.file
-            this.currentUser.profile_photo_path = this.fileName
-            console.log(this.currentUser.profile_photo_path)
-        },
-        uploadError(file, message) {
-            this.snackbar2 = {
-                message: message.message,
-                color: 'error',
-                show: true
-            }
-        },
-        fileRemoved(file) {
-            
         },
         required: function(value) {
             if (value) {

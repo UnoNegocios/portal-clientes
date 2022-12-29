@@ -32,14 +32,16 @@
                 <v-row class="ma-0">
                     Cobrado
                     <v-spacer/>
-                    <span style="font-size:18px; font-weight:600;">{{(card.received*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</span>
+                    <span v-if="card.received!=undefined" style="font-size:18px; font-weight:600;">{{(card.received*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</span>
+                    <v-skeleton-loader v-else type="text" width="120" style="margin-top: 6px !important;"></v-skeleton-loader>
                 </v-row>
             </v-card-subtitle>
             <v-card-subtitle class="ma-0 pa-0 pt-0">
                 <v-row class="ma-0">
                     Pendientes
                     <v-spacer/>
-                    {{(card.pending*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}
+                    <span v-if="card.pending!=undefined">{{(card.pending*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</span>
+                    <v-skeleton-loader v-else type="text" width="120" style="margin-top: 6px !important;"></v-skeleton-loader>
                 </v-row>
             </v-card-subtitle>
             <v-card-actions class="mt-3 px-0">

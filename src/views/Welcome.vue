@@ -58,22 +58,19 @@
         <v-row class="ma-0 my-12">
             <v-spacer/>
                 <v-badge bordered color="primary" icon="mdi-camera" overlap avatar offset-x="20" offset-y="150">
-                    <v-avatar size="50vw">
+                    <v-avatar size="50vw" @click="$refs.image.$refs.input.click()">
                         <v-img alt="user" :src="currentUser.profile_photo_path"></v-img>
                     </v-avatar>
                 </v-badge>
+                <v-file-input
+                    style="display:none!important;"
+                    hide-input
+                    ref="image"
+                    accept="image/*"
+                    v-model="imageData"
+                ></v-file-input>
             <v-spacer/>
         </v-row>
-
-        <vue-dropzone 
-        style="position: absolute; top: 130px; height: 200px; filter: opacity(0);"
-        v-if="showDorpzone"
-        ref="myVueDropzone" 
-        id="dropzone" 
-        :options="dropzoneOptions" 
-        v-on:vdropzone-success="uploadSuccess" 
-        v-on:vdropzone-error="uploadError" 
-        v-on:vdropzone-removed-file="fileRemoved"/>
 
 
 
@@ -126,7 +123,7 @@
     </v-row>
     <v-row class="ma-0">
         <v-spacer/>
-        <v-btn v-if="currentSlide<3" @click="currentSlide=currentSlide+1" class="px-12 py-6 peach-button"><strong>Siguiente</strong></v-btn>
+        <v-btn v-if="currentSlide<3" @click="currentSlide=currentSlide+1" class="px-12 py-6 peach-button" :disabled="!(this.min8(this.password1) === true && this.matchingPasswords() === true)&&currentSlide==2"><strong>Siguiente</strong></v-btn>
         <v-btn v-else @click="save()" class="px-12 py-6 peach-button"><strong>Guardar</strong></v-btn>
         <v-spacer/>
     </v-row>
@@ -151,28 +148,29 @@ export default {
         currentSlide: 1,
         show: false,
         show1: false,
-        showDorpzone:true,
-        dropzoneOptions: {
-            url: process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/photo",
-            addRemoveLinks: true,
-            maxFiles: 1,
-            thumbnailWidth: 250,
-            dictDefaultMessage: 'Haz clic aquí para seleccionar una imagen',
-            dictFallbackMessage: "Tu navegador no puede subir archivos arrastarndolos a la pantalla.",
-            dictFileTooBig: "File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB.",
-            dictInvalidFileType: "No puede cargar archivos de este tipo.",
-            dictCancelUpload: "Cancelar carga",
-            dictCancelUploadConfirmation: "Estás seguro de que deseas cancelar esta carga?",
-            dictRemoveFile: "Eliminar",
-            dictMaxFilesExceeded: "No puedes subir más archivos.",
-        },
         password:'',
         password1:'',
         successPass: false,
         successPass1: false,
+        imageData:''
       }
     },
-     computed:{
+    watch:{
+        imageData:{
+            handler(){     
+                let formData = new FormData();
+                formData.append('image', this.imageData);
+                axios.post(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/photo"
+                    ,formData
+                    ,{headers: {"Content-Type": "multipart/form-data"}}
+                ).then(response=>{
+                    console.log(response)
+                    this.currentUser.profile_photo_path = 'https://unopack.mx/files/thumbnail/' + response.data
+                })
+            },deep:true,
+        }
+    },
+    computed:{
         currentUser(){
             return this.$store.state.currentUser.user
         }
@@ -213,26 +211,6 @@ export default {
                     color: 'error',
                     show: true
                 }
-            })
-        },
-        uploadSuccess(file, response) {
-            console.log('File Successfully Uploaded with file name: ' + response.file);
-            this.fileName = 'https://unopack.mx/files/'+response.file
-            this.currentUser.profile_photo_path = this.fileName
-            this.fileRemoved()
-        },
-        uploadError(file, message) {
-            this.snackbar2 = {
-                message: message.message,
-                color: 'error',
-                show: true
-            }
-        },
-        fileRemoved() {
-            this.showDorpzone = false
-            this.fileName = ''
-            this.$nextTick(() => {
-                this.showDorpzone = true
             })
         },
         required: function(value) {
