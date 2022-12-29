@@ -1,5 +1,5 @@
 <template>
-  <v-app :class="noScroll">
+  <v-app>
     <password-reset v-if="$route.query.password_reset!=undefined"></password-reset>
     <welcome v-else-if="$route.query.t!=undefined"></welcome>
     <app v-else-if="token!=null"></app>
@@ -128,8 +128,5 @@ export default {
 }
 body{
     touch-action: manipulation;
-}
-.no-scroll{
-  height:50vh!important;
 }
 </style>

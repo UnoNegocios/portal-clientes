@@ -1,5 +1,5 @@
 <template>
-  <v-stepper v-model="currentSlide" style="height:100vh; background-color:#f4f5fa;">
+  <v-stepper v-model="currentSlide" style="background-color:#f4f5fa;">
     <!--v-row class="ma-0 py-8">
         <v-row/>
         <img style="width:80px;" src="/logo.png"/>
