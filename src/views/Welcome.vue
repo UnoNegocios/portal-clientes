@@ -1,5 +1,5 @@
 <template>
-  <v-stepper v-model="currentSlide" style="background-color:#f4f5fa;">
+  <v-stepper v-model="currentSlide" style="height:100vh; background-color:#f4f5fa;">
     <!--v-row class="ma-0 py-8">
         <v-row/>
         <img style="width:80px;" src="/logo.png"/>
@@ -32,11 +32,7 @@
 
             <v-card-title class="px-0"><v-spacer/>Configura tu Contraseña<v-spacer/></v-card-title>
 
-            <v-row class="ma-0 mb-6">
-                <v-spacer/>
-                <img class="image2" src="/password-monita.png"/>
-                <v-spacer/>
-            </v-row>
+            
 
             <v-text-field
                 outlined style="border-radius:5px; max-width:500px; margin:auto;" 
@@ -64,6 +60,12 @@
                     <v-icon class="mt-1" small @click="show1 = !show1" v-if="!show1">mdi-eye-off</v-icon>
                 </template>
             </v-text-field>
+
+            <v-row class="ma-0 mb-6">
+                <v-spacer/>
+                <img class="image2" src="/password-monita.png"/>
+                <v-spacer/>
+            </v-row>
       </v-stepper-content>
 
       <v-stepper-content step="3">

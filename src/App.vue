@@ -78,11 +78,6 @@ export default {
     }
   },
   computed:{
-    noScroll(){
-      if(this.$route.query.t!=undefined){
-        return 'no-scroll'
-      }
-    },
     password_reset(){
       return localStorage.getItem("password_reset");
     },
