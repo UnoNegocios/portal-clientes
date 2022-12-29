@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="disable-dbl-tap-zoom">
     <password-reset v-if="$route.query.password_reset!=undefined"></password-reset>
     <welcome v-else-if="$route.query.t!=undefined"></welcome>
     <app v-else-if="token!=null"></app>
