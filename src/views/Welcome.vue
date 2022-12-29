@@ -1,5 +1,5 @@
 <template>
-  <v-stepper v-model="currentSlide" style="height:calc(100vh - 30px); background-color:#f4f5fa;">
+  <v-stepper v-model="currentSlide" style="height:100vh; background-color:#f4f5fa;">
     <!--v-row class="ma-0 py-8">
         <v-row/>
         <img style="width:80px;" src="/logo.png"/>
@@ -153,6 +153,11 @@
 </template>
 
 <script>
+const password1 = document.getElementById('password1');
+password1.tabIndex = '-1';
+const password2 = document.getElementById('password2');
+password2.blur();
+
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import axios from "axios";
@@ -252,12 +257,6 @@ export default {
             }
         },
     },
-    mounted(){
-        const password1 = document.getElementById('password1');
-        password1.tabIndex = '-1';
-        const password2 = document.getElementById('password2');
-        password2.tabIndex = '-1';
-    }
   }
 </script>
 <style>
