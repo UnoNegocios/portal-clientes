@@ -6,7 +6,7 @@
         <v-row/>
     </v-row-->
     <v-stepper-items>
-      <v-stepper-content step="1" style="height:calc(100vh - 160px);">
+      <v-stepper-content step="1">
 
         <v-card-title>
             <v-spacer class="hidden-md-and-down"/>
@@ -22,13 +22,13 @@
 
         <v-card-title class="my-0 py-0 mt-2" style="font-weight: bold; font-size: 30px;"><v-spacer class="hidden-md-and-down"/>Configura tu perfil<v-spacer class="hidden-md-and-down"/></v-card-title>
         <v-card-title class="my-0 py-0 pt-3" style="font-weight: bold; font-size: 30px;"><v-spacer class="hidden-md-and-down"/>para comenzar<v-spacer class="hidden-md-and-down"/></v-card-title>
-<v-spacer class="hidden-md-and-down"/>
+        <v-spacer class="hidden-md-and-down"/>
         <v-card-subtitle class="mt-4 hidden-md-and-up" style="color:grey!important; font-size: 20px;">Estas a solo unos pasos</v-card-subtitle>
         <v-card-subtitle class="mt-4 hidden-md-and-down" style="color:grey!important; font-size: 20px; text-align:center;">Estas a solo unos pasos</v-card-subtitle>
 
       </v-stepper-content>
 
-      <v-stepper-content step="2" style="height:calc(100vh - 160px);">
+      <v-stepper-content step="2">
 
             <v-card-title class="px-0"><v-spacer/>Configura tu Contraseña<v-spacer/></v-card-title>
 
@@ -66,12 +66,12 @@
             </v-text-field>
       </v-stepper-content>
 
-      <v-stepper-content step="3" style="height:calc(100vh - 160px);">
+      <v-stepper-content step="3">
         <v-card-title class="px-0"><v-spacer/>Ahora una foto para tu perfil<v-spacer/></v-card-title>
-        <v-row class="ma-0 my-12">
+        <v-row class="ma-0 my-6">
             <v-spacer/>
-                <v-badge bordered color="primary" icon="mdi-camera" overlap avatar offset-x="20" offset-y="150">
-                    <v-avatar size="190px" @click="$refs.image.$refs.input.click()">
+                <v-badge bordered color="primary" icon="mdi-camera" overlap avatar offset-x="20" offset-y="140">
+                    <v-avatar size="180px" @click="$refs.image.$refs.input.click()">
                         <v-img alt="user" :src="currentUser.profile_photo_path"></v-img>
                     </v-avatar>
                 </v-badge>
@@ -127,24 +127,26 @@
       </v-stepper-content>
 
     </v-stepper-items>
-    <v-row class="ma-0 mb-4">
-        <v-spacer/>
-        <v-icon :color="iconColor(1)" x-small>mdi-record</v-icon>
-        <v-icon :color="iconColor(2)" class="mx-2" x-small>mdi-record</v-icon>
-        <v-icon :color="iconColor(3)" x-small>mdi-record</v-icon>
-        <v-spacer/>
-    </v-row>
-    <v-row class="ma-0">
-        <v-spacer/>
-        <v-btn v-if="currentSlide<3" @click="currentSlide=currentSlide+1" class="px-12 py-6 peach-button" :disabled="!(this.min8(this.password1) === true && this.matchingPasswords() === true)&&currentSlide==2"><strong>Siguiente</strong></v-btn>
-        <v-btn v-else @click="save()" class="px-12 py-6 peach-button"><strong>Guardar</strong></v-btn>
-        <v-spacer/>
-    </v-row>
-    <v-row class="ma-0 mt-3" v-if="currentSlide>1">
-        <v-spacer/>
-        <v-btn @click="currentSlide=currentSlide-1" class="px-12 py-6" text><strong>Atras</strong></v-btn>
-        <v-spacer/>
-    </v-row>
+    <div style="position:absolute; bottom:100px; width:100%;">
+        <v-row class="ma-0 mb-4">
+            <v-spacer/>
+            <v-icon :color="iconColor(1)" x-small>mdi-record</v-icon>
+            <v-icon :color="iconColor(2)" class="mx-2" x-small>mdi-record</v-icon>
+            <v-icon :color="iconColor(3)" x-small>mdi-record</v-icon>
+            <v-spacer/>
+        </v-row>
+        <v-row class="ma-0">
+            <v-spacer/>
+            <v-btn v-if="currentSlide<3" @click="currentSlide=currentSlide+1" class="px-12 py-6 peach-button" :disabled="!(this.min8(this.password1) === true && this.matchingPasswords() === true)&&currentSlide==2"><strong>Siguiente</strong></v-btn>
+            <v-btn v-else @click="save()" class="px-12 py-6 peach-button"><strong>Guardar</strong></v-btn>
+            <v-spacer/>
+        </v-row>
+        <v-row class="ma-0 mt-3" v-if="currentSlide>1">
+            <v-spacer/>
+            <v-btn @click="currentSlide=currentSlide-1" class="px-12 py-6" text><strong>Atras</strong></v-btn>
+            <v-spacer/>
+        </v-row>
+    </div>
   </v-stepper>
 </template>
 
@@ -272,7 +274,8 @@ export default {
         width: 20vw;
     }
     .image2{
-        width: 20vw;
+        width: 15vw;
+        margin:20px;
     }  
 }
 </style>
