@@ -137,7 +137,7 @@
         </v-row>
         <v-row class="ma-0">
             <v-spacer/>
-            <v-btn v-if="currentSlide<3" @click="currentSlide=currentSlide+1" class="px-12 py-6 peach-button" :disabled="!(this.min8(this.password1) === true && this.matchingPasswords() === true)&&currentSlide==2"><strong>Siguiente</strong></v-btn>
+            <v-btn v-if="currentSlide<3" @click="currentSlide=(currentSlide+1), window.scrollTo(0,0)" class="px-12 py-6 peach-button" :disabled="!(this.min8(this.password1) === true && this.matchingPasswords() === true)&&currentSlide==2"><strong>Siguiente</strong></v-btn>
             <v-btn v-else @click="save()" class="px-12 py-6 peach-button"><strong>Guardar</strong></v-btn>
             <v-spacer/>
         </v-row>
