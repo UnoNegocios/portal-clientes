@@ -1,5 +1,5 @@
 <template>
-  <v-stepper v-model="currentSlide" style="height:100%; background-color:#f4f5fa;">
+  <v-stepper v-model="currentSlide" style="height:calc(100vh - 30px); background-color:#f4f5fa;">
     <!--v-row class="ma-0 py-8">
         <v-row/>
         <img style="width:80px;" src="/logo.png"/>
@@ -137,7 +137,7 @@
         </v-row>
         <v-row class="ma-0">
             <v-spacer/>
-            <v-btn v-if="currentSlide<3" @click="currentSlide=(currentSlide+1)" class="px-12 py-6 peach-button" :disabled="!(this.min8(this.password1) === true && this.matchingPasswords() === true)&&currentSlide==2"><strong>Siguiente</strong></v-btn>
+            <v-btn v-if="currentSlide<3" @click="currentSlide=currentSlide+1" class="px-12 py-6 peach-button" :disabled="!(this.min8(this.password1) === true && this.matchingPasswords() === true)&&currentSlide==2"><strong>Siguiente</strong></v-btn>
             <v-btn v-else @click="save()" class="px-12 py-6 peach-button"><strong>Guardar</strong></v-btn>
             <v-spacer/>
         </v-row>
