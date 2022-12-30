@@ -32,9 +32,18 @@
 
             <v-card-title class="px-0"><v-spacer/>Configura tu Contraseña<v-spacer/></v-card-title>
 
-            
+            <v-text-field
+                
+                outlined style="border-radius:5px; max-width:500px; margin:auto; display:none;" 
+                dense
+                type="email" 
+                v-model="currentUser.email"
+                label="Correo Electrónico"
+                disabled>
+            </v-text-field>
 
             <v-text-field
+            class="mt-4"
                 outlined style="border-radius:5px; max-width:500px; margin:auto;" 
                 dense
                 :type="show ? 'text' : 'password'"
@@ -49,6 +58,7 @@
             </v-text-field>
             <!-- password1 -->
             <v-text-field
+                class="mb-4"
                     outlined style="border-radius:5px; max-width:500px; margin:auto;" dense
                 :type="show1 ? 'text' : 'password'"
                 v-model="password1"
@@ -61,7 +71,7 @@
                 </template>
             </v-text-field>
 
-            <v-row class="ma-0 mb-6">
+            <v-row class="ma-0">
                 <v-spacer/>
                 <img class="image2" src="/password-monita.png"/>
                 <v-spacer/>
