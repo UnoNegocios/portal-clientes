@@ -194,7 +194,15 @@ export default {
 
         this.$store.dispatch('collab/getCard', {from:startDate[0], to:startDate[1]})
         this.$store.dispatch('collab/getCollabs', {date_between: startDate})
-        this.selectedPeriod  = this.monthFormat(startDate[0].slice(5, 7)).slice(0, 3) + ' ' + startDate[0].slice(0, 4) + ' - ' + this.monthFormat(startDate[1].slice(5, 7)).slice(0, 3) + ' ' + startDate[1].slice(0, 4)
+
+        console.log(this.period)
+        
+        if(this.period[0] == this.period[1]){
+            this.selectedPeriod = this.monthFormat(startDate[0].slice(5, 7)).slice(0, 3) + ' ' + startDate[0].slice(0, 4)
+        }else{
+            this.selectedPeriod = this.monthFormat(startDate[0].slice(5, 7)).slice(0, 3) + ' ' + startDate[0].slice(0, 4) + ' - ' + this.monthFormat(startDate[1].slice(5, 7)).slice(0, 3) + ' ' + startDate[1].slice(0, 4)
+        }
+
     },
     computed:{
         closeDatePicker(){
