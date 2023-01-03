@@ -24,7 +24,7 @@
                 <v-card-subtitle class="ma-0 pa-0 pt-2" style="color:black!important;">
                     Cobrado
                     <br/>
-                    <span v-if="card.received" style="font-size:25px; line-height:32px; font-weight:600; color:black!important;">{{(card.received*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</span>
+                    <span v-if="card.received!=undefined" style="font-size:25px; line-height:32px; font-weight:600; color:black!important;">{{(card.received*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</span>
                     <v-skeleton-loader v-else type="text" width="180" style="margin-top: 6px !important;"></v-skeleton-loader>
                 </v-card-subtitle>
                 <v-card-subtitle class="ma-0 pa-0 pt-0" style="color:black!important;">
@@ -170,7 +170,14 @@ export default {
                         return new Date(a) - new Date(b);
                     });
                     this.period = [ordered_period[0].toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 10), ordered_period[1].toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 10)]
-                    this.selectedPeriod = this.monthFormat(this.period[0].slice(5, 7)).slice(0, 3) + ' ' + this.period[0].slice(0, 4) + ' - ' + this.monthFormat(this.period[1].slice(5, 7)).slice(0, 3) + ' ' + this.period[1].slice(0, 4)
+                    
+                    console.log(this.period)
+                    
+                    if(this.period[0] == this.period[1]){
+                        this.selectedPeriod = this.monthFormat(this.period[0].slice(5, 7)).slice(0, 3) + ' ' + this.period[0].slice(0, 4)
+                    }else{
+                        this.selectedPeriod = this.monthFormat(this.period[0].slice(5, 7)).slice(0, 3) + ' ' + this.period[0].slice(0, 4) + ' - ' + this.monthFormat(this.period[1].slice(5, 7)).slice(0, 3) + ' ' + this.period[1].slice(0, 4)
+                    }
                     this.open()
                     this.$store.dispatch('collab/getCard', {from:this.period[0], to:this.period[1]})
                     this.$store.dispatch('collab/getCollabs', {date_between:this.period})
@@ -183,7 +190,7 @@ export default {
         var date = new Date()
         startDate[0] = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 10)
 
-        startDate[1] = new Date(date.getFullYear(), date.getMonth() + 2, 0).toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 10)
+        startDate[1] = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 10)
 
         this.$store.dispatch('collab/getCard', {from:startDate[0], to:startDate[1]})
         this.$store.dispatch('collab/getCollabs', {date_between: startDate})

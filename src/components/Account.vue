@@ -116,10 +116,7 @@ export default {
     watch:{
         currentUser:{
             handler(newVal, oldVal){
-                console.log(oldVal)
-                console.log(newVal)
                 if(oldVal!=''){
-                    console.log('perro')
                     this.disabled_button = false
                 }
             },deep: true

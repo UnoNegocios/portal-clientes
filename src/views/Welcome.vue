@@ -191,7 +191,6 @@ export default {
                     ,formData
                     ,{headers: {"Content-Type": "multipart/form-data"}}
                 ).then(response=>{
-                    console.log(response)
                     this.currentUser.profile_photo_path = 'https://unopack.mx/files/thumbnail/' + response.data
                 })
             },deep:true,

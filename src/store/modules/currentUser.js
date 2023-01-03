@@ -45,7 +45,6 @@ const actions = {
           state.error = {show: true, message: response.data.message}
         }
       }).catch(error=>{
-        console.log(error)
         state.error = {show: true, message: error.response.data.message}
       })
   },
@@ -54,10 +53,8 @@ const actions = {
         email: user.email
       })
       .then(response => {
-        console.log(response)
         state.reset = {show: true, message: 'Si existe una cuenta con este correo te llegara información con instrucciones a tu bandeja', type:'success'}
       }).catch(error=>{
-        console.log(error)
         state.reset = {show: true, message: 'Si existe una cuenta con este correo te llegara información con instrucciones a tu bandeja', type:'success'}
       })
   },
