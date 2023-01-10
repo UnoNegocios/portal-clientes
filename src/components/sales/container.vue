@@ -24,12 +24,12 @@
                 <v-card-subtitle class="ma-0 pa-0 pt-2" style="color:black!important;">
                     Cobrado
                     <br/>
-                    <span v-if="card.received!=undefined" style="font-size:25px; line-height:32px; font-weight:600; color:black!important;">{{(card.received*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</span>
+                    <span v-if="card.received!=undefined" style="font-size:25px; line-height:32px; font-weight:600; color:black!important;">{{(card.received*1.16).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</span>
                     <v-skeleton-loader v-else type="text" width="180" style="margin-top: 6px !important;"></v-skeleton-loader>
                 </v-card-subtitle>
                 <v-card-subtitle class="ma-0 pa-0 pt-0" style="color:black!important;">
                         Pendientes
-                        <strong v-if="card.pending!=undefined">{{(card.pending*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</strong>
+                        <strong v-if="card.pending!=undefined">{{(card.pending*1.16).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</strong>
                         <v-skeleton-loader v-else type="text" width="120" style="margin-top: 6px !important;"></v-skeleton-loader>
                 </v-card-subtitle>
             </v-card>
@@ -73,7 +73,7 @@
                         <v-card-subtitle style="line-height:10px; font-size:12px; color:grey;">{{date(collab.influencer_payment_date, collab.payment_promise_date)}}</v-card-subtitle>
                     </v-col>
                     <v-col cols="6" class="pa-0" style="text-align:right;">
-                        <v-card-title :style="'font-size:17px; display: block; font-weight:600;' + color(collab.influencer_payment_date)">{{(collab.influencer_amount*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</v-card-title>
+                        <v-card-title :style="'font-size:17px; display: block; font-weight:600;' + color(collab.influencer_payment_date)">{{(collab.influencer_amount*1.16).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</v-card-title>
                         <v-card-subtitle :style="'font-size:13px; font-weight:500; color:' + colorStatus(collab.collab_status) + ';'">{{collab.collab_status}}</v-card-subtitle>
                     </v-col>
                 </v-row>
@@ -100,7 +100,7 @@
                 <v-row class="ma-0 px-4 mt-5">
                     <v-card-subtitle style="font-size:16px;">Subtotal</v-card-subtitle>
                     <v-spacer/>
-                    <v-card-subtitle style="font-size:16px;">{{(collab.influencer_amount/1.16).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</v-card-subtitle>
+                    <v-card-subtitle style="font-size:16px;">{{(collab.influencer_amount*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</v-card-subtitle>
                 </v-row>
 
                 <v-row class="ma-0 px-4">
@@ -112,7 +112,7 @@
                 <v-row class="ma-0 px-4 mb-5">
                     <v-card-title style="font-size:24px;">Monto</v-card-title>
                     <v-spacer/>
-                    <v-card-title style="font-size:24px;">{{(collab.influencer_amount*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</v-card-title>
+                    <v-card-title style="font-size:24px;">{{(collab.influencer_amount*1.16).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</v-card-title>
                 </v-row>
                     
                 <v-card class="elevation-0 pa-4 mx-7">
