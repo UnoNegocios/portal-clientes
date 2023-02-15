@@ -100,7 +100,7 @@
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn v-bind="attrs" v-on="on" class="px-3 py-4 peach-button-purple"><strong>VER VIDEO</strong><v-icon small class="ml-1">mdi-play-circle-outline</v-icon></v-btn>
                 </template>
-                <iframe width="720" height="400" src="https://www.youtube.com/embed/21IfehvNXDM" frameborder="0" autoplay="1" allow="accelerometer;  clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe width="720" height="400" src="https://www.youtube.com/embed/yMfWxCziNss" frameborder="0" autoplay="1" allow="accelerometer;  clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </v-dialog>
 
 
