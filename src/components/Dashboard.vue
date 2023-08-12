@@ -90,7 +90,7 @@
 
 
 
-        <v-container class="fill-height pa-0" fluid style="background:#c67ce4; border-radius:10px; background-image: linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,.45)),url('/talents_banner.png'); background-position:center; background-size: cover; height:200px;" >
+        <v-container class="fill-height pa-0" fluid style="background:#c67ce4; border-radius:10px; background-image: linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,.45)),url('/video-cover.jpeg'); background-position:center; background-size: cover; height:200px;" >
             <div style="margin:auto!important; text-align:center;">
             <span style="font-size:30px; font-family:oswald; color:white; font-weight:500;">CONOCE PEACHMX</span>
             <br/>
@@ -100,7 +100,7 @@
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn v-bind="attrs" v-on="on" class="px-3 py-4 peach-button-purple"><strong>VER VIDEO</strong><v-icon small class="ml-1">mdi-play-circle-outline</v-icon></v-btn>
                 </template>
-                <iframe width="720" height="400" src="https://www.youtube.com/embed/yMfWxCziNss" frameborder="0" autoplay="1" allow="accelerometer;  clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe width="720" height="400" src="https://www.youtube.com/embed/eB3M8AqWsR4" frameborder="0" autoplay="1" allow="accelerometer;  clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </v-dialog>
 
 

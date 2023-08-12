@@ -73,7 +73,7 @@
                         <v-card-subtitle style="line-height:10px; font-size:12px; color:grey;">{{date(collab.influencer_payment_date, collab.payment_promise_date)}}</v-card-subtitle>
                     </v-col>
                     <v-col cols="6" class="pa-0" style="text-align:right;">
-                        <v-card-title :style="'font-size:17px; display: block; font-weight:600;' + color(collab.influencer_payment_date)">{{(collab.influencer_amount*1.16).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</v-card-title>
+                        <v-card-title :style="'font-size:17px; display: block; font-weight:600;' + color(collab.influencer_payment_date)">{{(collab.influencer_amount*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</v-card-title>
                         <v-card-subtitle :style="'font-size:13px; font-weight:500; color:' + colorStatus(collab.collab_status) + ';'">{{collab.collab_status}}</v-card-subtitle>
                     </v-col>
                 </v-row>
