@@ -1,5 +1,5 @@
 <template>
-    <v-container step="2" style="height:100vh; max-width: 100vw; background:url('/background.png'); background-size: contain; font-family: Poppins!important;">
+    <v-container step="2" style="height:100vh; max-width: 100vw; background-size: contain; font-family: Poppins!important;">
 
         <v-card-title class="px-0 mb-12"><v-spacer/>Recuperar Contrseña<v-spacer/></v-card-title>
 

@@ -5,14 +5,14 @@
 
 
 
-          <v-container class="ma-0 pa-0" style="max-width: 100vw;  background:url('/background.png'); background-size: contain; font-family: Poppins!important;">
+          <v-container class="ma-0 pa-0" style="max-width: 100vw;  background-size: contain; font-family: Poppins!important;">
 
             <v-container class="fill-height pa-0" fluid style="min-height:100vh;">
               
 
                 <v-card class="pa-0 mx-auto" style="width:90vw; background:transparent; box-shadow:none;">
                   <v-row style="margin:0; margin-bottom:50px;">
-                    <img style="margin:auto;" height="80" src="/logo.png"/>
+                    <img style="margin:auto;" height="80" src="https://masterfrut.com/wp-content/uploads/2021/07/MASTERFRUT.svg"/>
                   </v-row>
                   <v-card-title style="font-family: Oswald!important;" class="pl-0">Iniciar Sesión</v-card-title>
                   <div style="background:white;">
@@ -48,12 +48,12 @@
                       
                   <v-card-actions class="pa-0">
                     <v-spacer></v-spacer>
-                    <v-btn block type="submit" @click="login" class="px-4 py-6 peach-button"><strong>Acceder</strong></v-btn>
+                    <v-btn block type="submit" @click="login" class="px-4 py-6 elevation-0" color="#5d267b" dark rounded><strong>Acceder</strong></v-btn>
                   </v-card-actions>
 
                   <v-row style="margin:0; margin-top:25px; margin-bottom:25px;">
                     <v-spacer/>
-                    <a @click="currentSlide='recover'">¿Olvidaste tu contraseña?</a>
+                    <a  @click="currentSlide='recover'">¿Olvidaste tu contraseña?</a>
                     <v-spacer/>
                   </v-row>
                 </v-card>
@@ -64,15 +64,15 @@
             
           </v-container>
         </v-stepper-content>
-        <v-stepper-content step="recover" class="pa-0" style="background-color: black!important;">
-          <v-container class="ma-0 pa-0" style="max-width: 100vw; background:url('/background.png'); background-size: contain; font-family: Poppins!important;">
+        <v-stepper-content step="recover" class="pa-0" style="">
+          <v-container class="ma-0 pa-0" style="max-width: 100vw; background-size: contain; font-family: Poppins!important;">
 
             <v-container class="fill-height pa-0" fluid style="min-height:100vh;">
               
 
-                <v-card dark class="pa-0 mx-auto" style="width:90vw; background:transparent; box-shadow:none;">
+                <v-card class="pa-0 mx-auto" style="width:90vw; background:transparent; box-shadow:none;">
                   <v-row style="margin:0; margin-bottom:50px;">
-                    <img style="margin:auto; filter:invert(1);" height="80" src="/logo.png"/>
+                    <img style="margin:auto;" height="80" src="https://masterfrut.com/wp-content/uploads/2021/07/MASTERFRUT.svg"/>
                   </v-row>
                   <v-card-title style="font-family: Oswald!important;" class="pl-0">Recuperar Contraseña</v-card-title>
 
@@ -84,7 +84,6 @@
                   <v-card-text class="px-0 pb-0">
                     <v-form>
                       <v-text-field 
-                      style="background:black;"
                       :rules="[rules.required, rules.email]"
                       @keydown.enter="login" 
                       label="Email" 
@@ -97,12 +96,12 @@
                       
                   <v-card-actions class="pa-0">
                     <v-spacer></v-spacer>
-                    <v-btn block type="submit" @click="recoverPassword" class="px-4 py-6 dark-peach-button"><strong>Recuperar</strong></v-btn>
+                    <v-btn color="#5d267b" dark rounded block type="submit" @click="recoverPassword" class="px-4 py-6"><strong>Recuperar</strong></v-btn>
                   </v-card-actions>
 
                   <v-row style="margin:0; margin-top:25px; margin-bottom:25px;">
                     <v-spacer/>
-                    <a style="color:#cc82eb;" @click="currentSlide='login'">Iniciar Sesión</a>
+                    <a style="color:#5d267b;" @click="currentSlide='login'">Iniciar Sesión</a>
                     <v-spacer/>
                   </v-row>
                 </v-card>

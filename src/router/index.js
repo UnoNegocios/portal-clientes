@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Dashboard from '../components/Dashboard.vue'
 import Account from '../components/Account.vue'
+import OrdersHistory from '../components/OrdersHistory.vue'
+import ClientInfo from '../components/ClientInfo.vue'
 
 Vue.use(VueRouter)
 
@@ -17,34 +19,14 @@ Vue.use(VueRouter)
     component: Dashboard
   },
   {
-    path: '/sales',
-    name: 'Sales',
-    component: () => import('../components/sales/container.vue')
+    path: '/orders-history',
+    name: 'History',
+    component: OrdersHistory
   },
   {
-    path: '/payments',
-    name: 'Payments',
-    component: () => import('../components/payments/container.vue')
-  },
-  {
-    path: '/reports',
-    name: 'Reports',
-    component: () => import('../components/graphics/container.vue')
-  },
-  {
-    path: '/events',
-    name: 'Events',
-    component: () => import('../components/events/container.vue')
-  },
-  {
-    path: '/news',
-    name: 'News',
-    component: () => import('../components/news/container.vue')
-  },
-  {
-    path: '/documents',
-    name: 'Documents',
-    component: () => import('../components/documents/container.vue')
+    path: '/client-info',
+    name: 'Client Info',
+    component: ClientInfo
   },
 ]
 

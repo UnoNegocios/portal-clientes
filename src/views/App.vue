@@ -12,21 +12,33 @@
                 <v-col cols="4">
                     <v-list-item to="/">
                         <v-spacer/>
-                            <v-icon>mdi-view-dashboard</v-icon>
+                            <div style="text-align:center;">
+                            <v-icon>mdi-cart</v-icon>
+                            <br/>
+                            <span style="font-weight:500;">Nuevo Pedido</span>
+                            </div>
                         <v-spacer/>
                     </v-list-item>
                 </v-col>
                 <v-col cols="4">
-                    <v-list-item to="/reports">
+                    <v-list-item to="/orders-history">
                         <v-spacer/>
-                        <v-icon>mdi-chart-bar</v-icon>
+                            <div style="text-align:center;">
+                            <v-icon>mdi-order-bool-ascending-variant</v-icon>
+                            <br/>
+                            <span style="font-weight:500;">Historial de Pedidos</span>
+                            </div>
                         <v-spacer/>
                     </v-list-item>
                 </v-col>
                 <v-col cols="4">
-                    <v-list-item to="/events">
+                    <v-list-item to="/client-info">
                         <v-spacer/>
-                        <v-icon>mdi-calendar</v-icon>
+                            <div style="text-align:center;">
+                            <v-icon>mdi-account-details</v-icon>
+                            <br/>
+                            <span style="font-weight:500;">Datos de Cliente</span>
+                            </div>
                         <v-spacer/>
                     </v-list-item>
                 </v-col>
@@ -57,10 +69,10 @@ export default {
     box-shadow: 0px 10px 20px 10px #00000018!important;
 }
 .v-list-item.v-list-item--link.theme--light:hover i::before{
-    color: #c57de4!important;
+    color: #5d267b!important;
 }
 .v-list-item--active i::before{
-    color: #c57de4!important;
+    color: #5d267b!important;
 }
 .theme--light.v-list-item--active:hover::before, .theme--light.v-list-item--active::before{
     opacity: 0!important;

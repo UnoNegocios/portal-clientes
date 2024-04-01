@@ -7,12 +7,12 @@
         </v-row>
         <v-row class="ma-0 my-12">
             <v-spacer/>
-                    <a @click="$refs.image.$refs.input.click()">
-                        <v-badge bordered color="primary" icon="mdi-camera" overlap avatar offset-x="20" offset-y="90">
+                    <!--a @click="$refs.image.$refs.input.click()">
+                        <v-badge bordered color="primary" icon="mdi-camera" overlap avatar offset-x="20" offset-y="90"-->
                             <v-avatar size="100px">
-                                <v-img alt="user" :src="currentUser.profile_photo_path"></v-img>
+                                <v-img alt="user" src="https://backendmf.unocrm.mx/files/default.jpg"></v-img>
                             </v-avatar>
-                        </v-badge>
+                        <!--/v-badge>
                     </a>
                     <v-file-input
                         style="display:none!important;"
@@ -20,7 +20,7 @@
                         ref="image"
                         accept="image/*"
                         v-model="imageData"
-                    ></v-file-input>
+                    ></v-file-input-->
             <v-spacer/>
         </v-row>
         <div class="mt-12 pt-12 px-8" style="text-align:center; height:calc(100vh - 280px)!important; background:white; border-radius: 10px 10px 0px 0px; box-shadow: 0px 10px 20px 10px #00000018!important;">
@@ -65,7 +65,7 @@
                         
                         <v-row class="ma-0 mt-6">
                             <v-spacer/>
-                            <v-btn type="submit" @click="savePassword()" class="py-3 peach-button" :disabled="!(this.min8(this.password1) === true && this.matchingPasswords() === true)"><strong>Guardar</strong></v-btn>
+                            <v-btn type="submit" dark @click="savePassword()" class="py-3 elevation-0" color="#5d267b" :disabled="!(this.min8(this.password1) === true && this.matchingPasswords() === true)">Guardar</v-btn>
                         </v-row>    
                     </v-card>
                 </v-dialog>
@@ -201,13 +201,6 @@ export default {
 </script>
 
 <style>
-.peach-button{
-    box-shadow: 5px 5px 0px black!important;
-    border: solid 3px black!important;
-    border-radius: 5px;
-    background: #cc82eb!important;
-    color: black!important;
-}
 .dropzone .dz-preview {
     max-width: 68vw!important;
 }

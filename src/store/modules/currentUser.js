@@ -28,7 +28,7 @@ const actions = {
       }
     }
     ).then(response => {
-      commit("setUser", response.data.data);
+      commit("setUser", response.data);
     });
   },
   loginUser({state}, user) {
@@ -38,9 +38,10 @@ const actions = {
       })
       .then(response => {
         if (response.data.access_token) {
-          localStorage.setItem("session_token", response.data.access_token);
-          window.location.replace("/");
+          /*localStorage.setItem("session_token", response.data.access_token);
+          window.location.replace("/");*/
           //location.reload();
+          console.log(response)
         }else{
           state.error = {show: true, message: response.data.message}
         }
