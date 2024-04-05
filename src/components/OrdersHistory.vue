@@ -181,14 +181,14 @@ export default {
                 var items = []
                 var total = 0
                 var link = ''
-                axios.get(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/sales?filter[company_id]=80&" + link + "page=" + page + "&itemsPerPage=" + itemsPerPage).then(response => {
+                axios.get(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/sales?filter[company_id]=" + localStorage.getItem('user_company_id') + "&" + link + "page=" + page + "&itemsPerPage=" + itemsPerPage).then(response => {
                     this.salesLength = response.data.meta.total
                     items = this.mapSales(response.data.data)
                     total = response.data.meta.total
                     if (sortBy.length === 1 && sortDesc.length === 1) {
                         if(sortDesc[0]){
                             axios
-                            .get(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/sales?filter[company_id]=80&" + link + "page=" + page + "&sort=-" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
+                            .get(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/sales?filter[company_id]=" + localStorage.getItem('user_company_id') + "&" + link + "page=" + page + "&sort=-" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
                             .then(response=>{
                                 items = this.mapSales(response.data.data)
                                 total = response.data.meta.total
@@ -199,7 +199,7 @@ export default {
                             })
                         }else{
                             axios
-                            .get(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/sales?filter[company_id]=80&" + link + "page=" + page + "&sort=" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
+                            .get(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/sales?filter[company_id]=" + localStorage.getItem('user_company_id') + "&" + link + "page=" + page + "&sort=" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
                             .then(response=>{
                                 items = this.mapSales(response.data.data)
                                 total = response.data.meta.total

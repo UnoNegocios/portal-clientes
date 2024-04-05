@@ -294,7 +294,7 @@ export default {
             //if (this.contactList.length > 0) return
             if (this.isLoadingBranch) return
             this.isLoadingBranch = true
-            axios.get(process.env.VUE_APP_BACKEND_ROUTE + 'api/v2/company_branches?filter[company_id]=80&filter[name]=' + val)
+            axios.get(process.env.VUE_APP_BACKEND_ROUTE + 'api/v2/company_branches?filter[company_id]=' + localStorage.getItem('user_company_id') + '&filter[name]=' + val)
             .then(res => {
                 /*if(this.entries.contacts.length>0){
                     this.entries.contacts.concat(res.data.data)

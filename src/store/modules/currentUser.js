@@ -38,10 +38,10 @@ const actions = {
       })
       .then(response => {
         if (response.data.access_token) {
-          /*localStorage.setItem("session_token", response.data.access_token);
-          window.location.replace("/");*/
-          //location.reload();
-          console.log(response)
+          localStorage.setItem("session_token", response.data.access_token);
+          localStorage.setItem("user_company_id", response.data.user.company_id);
+          window.location.replace("/");
+          location.reload();
         }else{
           state.error = {show: true, message: response.data.message}
         }
