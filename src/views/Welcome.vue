@@ -78,7 +78,7 @@
             </v-row>
       </v-stepper-content>
 
-      <v-stepper-content step="3">
+      <!--v-stepper-content step="3">
         <v-card-title class="px-0"><v-spacer/>Ahora una foto para tu perfil<v-spacer/></v-card-title>
         <v-row class="ma-0 my-6">
             <v-spacer/>
@@ -96,11 +96,6 @@
                 ></v-file-input>
             <v-spacer/>
         </v-row>
-
-
-
-
-
         <v-list style="background:#f4f5fa;">
             <v-list-item style="font-size: 20px; font-weight: 500;">
                 <v-spacer/>
@@ -133,29 +128,26 @@
                 <v-spacer/>
             </v-list-item>
         </v-list>
-
-
-
-      </v-stepper-content>
+      </v-stepper-content-->
 
     </v-stepper-items>
     <div style="position:absolute; bottom:100px; width:100%;">
         <v-row class="ma-0 mb-4">
             <v-spacer/>
             <v-icon :color="iconColor(1)" x-small>mdi-record</v-icon>
-            <v-icon :color="iconColor(2)" class="mx-2" x-small>mdi-record</v-icon>
-            <v-icon :color="iconColor(3)" x-small>mdi-record</v-icon>
+            <v-icon :color="iconColor(2)" class="ml-2" x-small>mdi-record</v-icon>
+            <!--v-icon :color="iconColor(3)" x-small>mdi-record</v-icon-->
             <v-spacer/>
         </v-row>
         <v-row class="ma-0">
             <v-spacer/>
-            <v-btn v-if="currentSlide<3" @click="currentSlide=currentSlide+1" class="px-12 py-6 peach-button" :disabled="!(this.min8(this.password1) === true && this.matchingPasswords() === true)&&currentSlide==2"><strong>Siguiente</strong></v-btn>
-            <v-btn v-else @click="save()" class="px-12 py-6 peach-button"><strong>Guardar</strong></v-btn>
+            <v-btn rounded color="#5d267b" dark v-if="currentSlide<2" @click="currentSlide=currentSlide+1" class="px-12 py-6" :disabled="!(this.min8(this.password1) === true && this.matchingPasswords() === true)&&currentSlide==2"><strong>Siguiente</strong></v-btn>
+            <v-btn rounded color="#5d267b" dark v-else @click="save()" class="px-12 py-6"><strong>Guardar</strong></v-btn>
             <v-spacer/>
         </v-row>
         <v-row class="ma-0 mt-3" v-if="currentSlide>1">
             <v-spacer/>
-            <v-btn @click="currentSlide=currentSlide-1" class="px-12 py-6" text><strong>Atras</strong></v-btn>
+            <v-btn @click="currentSlide=currentSlide-1" class="px-12 py-6" rounded text><strong>Atras</strong></v-btn>
             <v-spacer/>
         </v-row>
     </div>
@@ -213,12 +205,12 @@ export default {
             }
         },
         save(){
-            axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/users/" + this.currentUser.id,Object.assign(this.currentUser),{
+            /*axios.put(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/users/" + this.currentUser.id,Object.assign(this.currentUser),{
                 headers: {
                     'Authorization': "Bearer " + this.$route.query.t
                 }
-                }).then(response=>{
-                axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/password", {'password':this.password},{
+                }).then(response=>{*/
+                axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/user/password", {'password':this.password},{
                 headers: {
                     'Authorization': "Bearer " + this.$route.query.t
                 }
@@ -231,13 +223,13 @@ export default {
                         show: true
                     }
                 })
-            }).catch(error => {
+            /*}).catch(error => {
                 this.snackbar = {
                     message: error.response.data.message,
                     color: 'error',
                     show: true
                 }
-            })
+            })*/
         },
         required: function(value) {
             if (value) {

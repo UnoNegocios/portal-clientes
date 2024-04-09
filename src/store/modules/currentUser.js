@@ -50,7 +50,7 @@ const actions = {
       })
   },
   passwordReset({state}, user) {
-    axios.post(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/login/reset-password", {
+    axios.post(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/login/reset-password", {
         email: user.email
       })
       .then(response => {

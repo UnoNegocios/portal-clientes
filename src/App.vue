@@ -90,7 +90,7 @@ export default {
       localStorage.removeItem("password_reset")
     }, 2000);
     if(this.$route.query.user!=undefined&&this.$route.query.expires!=undefined&&this.$route.query.signature){
-      axios.get(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/password_reset?expires=" + this.$route.query.expires + '&user=' + this.$route.query.user + '&signature=' + this.$route.query.signature).then(response => {
+      axios.get(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/password_reset?expires=" + this.$route.query.expires + '&user=' + this.$route.query.user + '&signature=' + this.$route.query.signature).then(response => {
         localStorage.setItem("session_token", response.data);
         window.location.replace('/?t=' + response.data + '&password_reset=true');
       });

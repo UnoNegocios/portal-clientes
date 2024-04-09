@@ -3,7 +3,7 @@
 
         <v-card-title class="px-0 mb-12"><v-spacer/>Recuperar Contrseña<v-spacer/></v-card-title>
 
-        <img style="width:100%; padding:50px 100px;" class="mb-4" src="/logo.png"/>
+        <img style="width:100%; padding:50px 100px;" class="mb-4" src="https://masterfrut.com/wp-content/uploads/2021/07/MASTERFRUT.svg"/>
 
         <v-row class="ma-0 mb-6">
             <v-spacer/>
@@ -40,7 +40,7 @@
 
         <v-row class="ma-0 mt-6">
             <v-spacer/>
-            <v-btn @click="save()" class="px-12 py-6 peach-button"><strong>Guardar</strong></v-btn>
+            <v-btn @click="save()" class="px-12 py-6" rounded color="#5d267b" dark><strong>Guardar</strong></v-btn>
             <v-spacer/>
         </v-row>
     </v-container>
@@ -69,7 +69,7 @@ export default {
     },
     methods:{
         save(){
-            axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/password", {'password':this.password},{
+            axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/user/password", {'password':this.password},{
                 headers: {
                     'Authorization': "Bearer " + this.$route.query.t
                 }
