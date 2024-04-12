@@ -20,7 +20,7 @@
             <v-row class="ma-0">
                 <v-card-title>Realiza tu Pedido</v-card-title>
                 <v-spacer/>
-                <v-btn class="elevation-0 ma-4" dark color="#5d267b">Realizar Pedido</v-btn>
+                <v-btn class="elevation-0 ma-4" :loading="gris" @click="save()" dark color="#5d267b">Realizar Pedido</v-btn>
             </v-row>
             <v-row class="ma-0" style="margin-top:-30px;">
                 <v-col :cols="liga=='https://backendmf.unocrm.mx/'?'4':'6'">
@@ -139,6 +139,7 @@ export default {
             gris:false,
             companyLists:[],
             quotation:{
+                bar:0,
                 purchase_order:'',
                 client_note:'',
                 datePicker:'',
@@ -152,7 +153,7 @@ export default {
                     show_note:false,
                     note:''
                 }],
-                status:'pedido cliente',
+                status:'pedido',
                 subtotal:'',
                 date:'',
                 iva:'',
@@ -203,7 +204,7 @@ export default {
         productsList(){
             var perro = this.entries.products.map(id=>{return{
                 ...id,
-                inventory:id.branch_inventories[this.currentUser.branch[0].name],
+                inventory:id.branch_inventories['Masterfrut'],
                 key: id.name + ' ' + id.code_one
             }})
             return perro
@@ -231,8 +232,56 @@ export default {
             this.quotation.items.splice(index, 1);
         },
         save(){
-            
-        }
+            this.quotation.company_id = this.currentUser.company_id
+            this.quotation.user_id = this.currentUser.id
+            this.quotation.date = new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 10)
+            this.gris = true
+            this.quotation.created_by_user_id = this.currentUser.id
+            this.quotation.last_updated_by_user_id = this.currentUser.id
+            this.quotation.subtotal = this.totalQuotation
+            this.quotation.total = this.totalQuotation
+            this.quotation.iva = 0
+            this.quotation.payment_status = null
+            this.$nextTick(() => {
+                axios.post(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/sales",Object.assign(this.quotation)).then(response=>{
+                    this.$nextTick(() => {
+                        this.quotation={
+                            bar:0,
+                            purchase_order:'',
+                            client_note:'',
+                            datePicker:'',
+                            datePicker2:'',
+                            company_id:null,
+                            contact_id:'',
+                            items:[{
+                                quantity:1,
+                                item:'',
+                                price:'',
+                                show_note:false,
+                                note:''
+                            }],
+                            status:'pedido cliente',
+                            subtotal:'',
+                            date:'',
+                            iva:'',
+                            total:'',
+                            user_id:'',
+                            created_by_user_id:'',
+                            last_updated_by_user_id:'',
+                            company_branch_id:''
+                        }
+                        this.gris = false
+                    })
+                }).catch(error => {
+                    this.snackbar = {
+                        message: error.response.data.message,
+                        color: 'error',
+                        show: true
+                    }
+                    this.gris = false
+                })
+            })
+        },
     },
     watch:{
         companyPercentage:{
@@ -271,15 +320,9 @@ export default {
             //if (this.contactList.length > 0) return
             if (this.isLoadingContact) return
             this.isLoadingContact = true
-
-            var length = this.quotation.company_id.length
-            if(length>0){
-                var filter = 'filter[company_id]='
-                for(var i=0; i<length; i++){
-                    filter = filter + 80
-                }
-            }else{
-                var filter = ''
+            var filter = 'filter[company_id]=' + this.currentUser.company_id
+            for(var i=0; i<length; i++){
+                filter = filter + 80
             }
             axios.get(process.env.VUE_APP_BACKEND_ROUTE + 'api/v2/contact_p?' + filter + "filter[name]=" + val)
             .then(res => {
