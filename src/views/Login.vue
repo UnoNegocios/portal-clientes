@@ -11,8 +11,8 @@
               
 
                 <v-card class="pa-0 mx-auto" style="width:90vw; background:transparent; box-shadow:none;">
-                  <v-row style="margin:0; margin-bottom:50px;">
-                    <img style="margin:auto;" height="80" src="https://masterfrut.com/wp-content/uploads/2021/07/MASTERFRUT.svg"/>
+                  <v-row style="margin:0; margin:50px 0px 20px;">
+                    <img style="margin:auto;" src="https://masterfrut.com/wp-content/uploads/2021/07/MASTERFRUT.svg"/>
                   </v-row>
                   <v-card-title style="font-family: Oswald!important;" class="pl-0">Iniciar Sesión</v-card-title>
                   <div style="background:white;">
@@ -56,6 +56,18 @@
                     <a  @click="currentSlide='recover'">¿Olvidaste tu contraseña?</a>
                     <v-spacer/>
                   </v-row>
+
+                  <v-row style="margin:0; margin-top:50px; margin-bottom:25px;">
+                    <v-spacer/>
+                    <div style="text-align:center; font-size:12px; line-height:23px;">
+                      <strong>Horario de atención vía telefónica</strong>
+                      <br/>
+                      <a href="tel:5218120019271">+52 1 81 2001 9271</a>
+                      <br/>
+                      De lunes a domingo de 7:00 a 17:00 horas.
+                    </div>
+                    <v-spacer/>
+                  </v-row>
                 </v-card>
 
                 
@@ -72,7 +84,7 @@
 
                 <v-card class="pa-0 mx-auto" style="width:90vw; background:transparent; box-shadow:none;">
                   <v-row style="margin:0; margin-bottom:50px;">
-                    <img style="margin:auto;" height="80" src="https://masterfrut.com/wp-content/uploads/2021/07/MASTERFRUT.svg"/>
+                    <img style="margin:auto;" src="https://masterfrut.com/wp-content/uploads/2021/07/MASTERFRUT.svg"/>
                   </v-row>
                   <v-card-title style="font-family: Oswald!important;" class="pl-0">Recuperar Contraseña</v-card-title>
 

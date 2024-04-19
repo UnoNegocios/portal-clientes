@@ -3,7 +3,9 @@
 
         <v-card-title class="px-0 mb-12"><v-spacer/>Recuperar Contrseña<v-spacer/></v-card-title>
 
-        <img style="width:100%; padding:50px 100px;" class="mb-4" src="https://masterfrut.com/wp-content/uploads/2021/07/MASTERFRUT.svg"/>
+        <v-row style="margin:0; margin-bottom:50px;">
+            <img style="margin:auto;" src="https://masterfrut.com/wp-content/uploads/2021/07/MASTERFRUT.svg"/>
+        </v-row>
 
         <v-row class="ma-0 mb-6">
             <v-spacer/>
