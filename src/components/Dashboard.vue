@@ -23,7 +23,7 @@
                 <v-btn class="elevation-0 ma-4" :loading="gris" @click="save()" dark color="#5d267b">Realizar Pedido</v-btn>
             </v-row>
             <v-row class="ma-0" style="margin-top:-30px;">
-                <v-col :cols="liga=='https://backendmf.unocrm.mx/'?'4':'6'">
+                <v-col :cols="liga=='https://backendmf.unocrm.mx/'?'3':'4'">
                     <v-autocomplete outlined dense :disabled="quotation.company_id==''" v-model="quotation.company_branch_id" :items="branchesList" :loading="isLoadingBranch" :search-input.sync="searchBranch" hide-no-data item-value="id" item-text="name" label="Sucursal" placeholder="Escribe para buscar" attach>
                         <template v-slot:item="{item, attrs, on}">
                             <v-list-item v-on="on" v-bind="attrs">
@@ -39,7 +39,7 @@
                         </template> 
                     </v-autocomplete>
                 </v-col>
-                <v-col :cols="liga=='https://backendmf.unocrm.mx/'?'4':'6'">
+                <v-col :cols="liga=='https://backendmf.unocrm.mx/'?'3':'4'">
                     <v-autocomplete outlined dense @keydown.enter="filter()" v-model="quotation.contact_id" :items="contactList" :loading="isLoadingContact" :search-input.sync="searchContacts" hide-no-data item-value="id" item-text="name" label="Contacto" placeholder="Escribe para buscar" attach>
                             <template v-slot:item="{item, attrs, on}">
                                 <v-list-item v-on="on" v-bind="attrs">
@@ -55,8 +55,16 @@
                             </template> 
                         </v-autocomplete>
                 </v-col>
-                <v-col :cols="liga=='https://backendmf.unocrm.mx/'?'4':'0'">
+                <v-col :cols="liga=='https://backendmf.unocrm.mx/'?'3':'0'">
                     <v-text-field outlined dense v-if="liga=='https://backendmf.unocrm.mx/'" v-model="quotation.purchase_order" label="Orden de Compra"></v-text-field>
+                </v-col>
+                <v-col :cols="liga=='https://backendmf.unocrm.mx/'?'3':'4'">
+                <v-menu v-model="datePicker" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="290px" >
+                    <template v-slot:activator="{ on }">
+                        <v-text-field :rules="[v => !!v || 'Campo requerido']" clearable required v-model="quotation.date" label="Fecha Programada" outlined dense prepend-inner-icon="mdi-calendar" readonly v-on="on"></v-text-field>
+                    </template>
+                    <v-date-picker :min="minDate" color="primary" v-model="quotation.date" @input="datePicker = false"></v-date-picker>
+                </v-menu>
                 </v-col>
             </v-row>
             <v-row class="px-2 ma-0 py-2" v-for="(item,k) in quotation.items" :key="k">
@@ -108,7 +116,7 @@
                         </div>
                         <v-spacer/>
                     </v-row>
-                    <v-textarea outlined v-if="item.show_note" label="Nota"></v-textarea>
+                    <v-textarea outlined v-if="item.show_note" v-model="item.client_note" label="Nota"></v-textarea>
                 </div>
             </v-row>
             <v-row class="ma-4 pa-4" style="background:#dddddd; border-radius:10px;">
@@ -138,12 +146,11 @@ export default {
             },
             gris:false,
             companyLists:[],
+            datePicker:false,
             quotation:{
                 bar:0,
                 purchase_order:'',
                 client_note:'',
-                datePicker:'',
-                datePicker2:'',
                 company_id:null,
                 contact_id:'',
                 items:[{
@@ -151,7 +158,7 @@ export default {
                     item:'',
                     price:'',
                     show_note:false,
-                    note:''
+                    client_note:''
                 }],
                 status:'pedido',
                 subtotal:'',
@@ -178,6 +185,19 @@ export default {
         }
     },
     computed:{
+        minDate(){
+            const now = new Date();
+            const hour = now.getHours();
+            // Si la hora es antes de las 17:00 (5 PM)
+            if (hour < 17) {
+                // Devuelve el día actual en formato YYYY-MM-DD
+                return now.toISOString().split('T')[0];
+            } else {
+                // Si es después de las 17:00 (5 PM), devuelve el día siguiente
+                now.setDate(now.getDate() + 1);
+                return now.toISOString().split('T')[0];
+            }
+        },
         totalQuotation(){
             var total=0
             if(this.quotation.items.length!=0){
@@ -226,7 +246,7 @@ export default {
     },
     methods:{
         add(index) {
-            this.quotation.items.push({ quantity: 1, item: '', price:'' });
+            this.quotation.items.push({ quantity: 1, item: '', price:'', show_note:false, client_note:''});
         },
         remove(index) {
             this.quotation.items.splice(index, 1);
@@ -258,9 +278,9 @@ export default {
                                 item:'',
                                 price:'',
                                 show_note:false,
-                                note:''
+                                client_note:''
                             }],
-                            status:'pedido cliente',
+                            status:'pedido',
                             subtotal:'',
                             date:'',
                             iva:'',
