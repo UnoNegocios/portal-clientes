@@ -254,7 +254,7 @@ export default {
         save(){
             this.quotation.company_id = this.currentUser.company_id
             this.quotation.user_id = this.currentUser.id
-            this.quotation.date = new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 10)
+            //this.quotation.date = new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 10)
             this.gris = true
             this.quotation.created_by_user_id = this.currentUser.id
             this.quotation.last_updated_by_user_id = this.currentUser.id
