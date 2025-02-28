@@ -142,7 +142,7 @@ export default {
         },
         save(){
             this.loader_button = true
-            axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/users/" + this.currentUser.id,Object.assign(this.currentUser)).then(response=>{
+            axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/users/" + this.currentUser.id,Object.assign(this.currentUser)).then(response=>{
                 this.disabled_button = true
                 this.loader_button = false
                 this.snackbar = {
@@ -159,7 +159,7 @@ export default {
             })
         },
         savePassword(){
-            axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/user/password", {'password':this.password}).then(response=>{
+            axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/user/password", {'password':this.password}).then(response=>{
                 this.dialog2 = false
                 this.editPassword=false
                 this.snackbar = {
