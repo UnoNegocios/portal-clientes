@@ -2,9 +2,7 @@
     <v-app class="pa-0">
         <v-main class="pa-0" style="background-color:#f4f5fa;">
             <v-container class="pa-0" fluid>
-                    <transition name="fade" mode="out-in">
-                        <router-view/>
-                    </transition>
+                    <router-view v-if="currentUser!=undefined"/>
             </v-container>
         </v-main>
         <v-card class="menu-bottom px-4 py-0 pb-2">
@@ -57,6 +55,14 @@ export default {
     created(){
         this.$store.dispatch('currentUser/getUser')
     },
+    mounted(){
+        this.$store.dispatch('currentUser/getUser')
+    },
+    computed:{
+        currentUser(){
+            return this.$store.state.currentUser.user
+        }
+    }
 }
 </script>
 

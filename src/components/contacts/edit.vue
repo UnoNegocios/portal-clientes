@@ -32,14 +32,10 @@
                         <v-icon class="pa-4">mdi-phone-outline</v-icon>
                     </v-col>
                     <v-col class="py-0" cols="12" sm="6" md="10">
-                        <vue-tel-input-vuetify :rules="[v => !!v || 'Campo requerido']" v-model="contact.phone" label="Teléfono"></vue-tel-input-vuetify>
+                        <v-text-field :rules="[v => !!v || 'Campo requerido']" v-model="contact.phone" label="Teléfono"></v-text-field>
                     </v-col>
                     <v-col class="py-0" cols="12" sm="6" md="2">
                         <v-icon class="pa-4">mdi-domain</v-icon>
-                    </v-col>
-                    <v-col class="py-0" cols="12" sm="6" md="5">
-                        <v-autocomplete disabled v-model="contact.company_id" :items="companyLists" label="Empresa" item-text="name" item-value="id">               
-                        </v-autocomplete>
                     </v-col>
                     <v-col class="py-0" cols="12" sm="6" md="5">
                         <v-text-field :rules="[v => !!v || 'Campo requerido']" v-model="contact.job_position" label="Puesto"></v-text-field>
@@ -84,12 +80,6 @@ import axios from "axios";
         liga(){
             return process.env.VUE_APP_BACKEND_ROUTE
         },
-        companyLists(){
-            return this.$store.state.company.companies;
-        },
-    },
-    created(){
-        this.$store.dispatch('company/getCompanies')
     },
     methods: {
         close () {

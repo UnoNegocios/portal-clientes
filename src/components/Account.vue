@@ -151,6 +151,8 @@ export default {
                     show: true
                 }
             }).catch(error => {
+                this.disabled_button = true
+                this.loader_button = false
                 this.snackbar = {
                     message: error.response.data.message,
                     color: 'error',

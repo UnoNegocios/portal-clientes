@@ -3,7 +3,7 @@
         <v-card-title class="">
             Datos de Cliente
         </v-card-title>
-        <v-row class="ma-0">
+        <v-row class="ma-0 mb-6">
             <v-card v-if="client.credit_days!=undefined">
                 <v-card-title>Días de Crédito</v-card-title>
                 <v-card-subtitle>{{client.credit_days}}</v-card-subtitle>
@@ -15,12 +15,14 @@
         </v-row>
         <v-row class="ma-0">
             <v-col cols="6">
-                <v-text-field outlined prepend-inner-icon="mdi-domain" v-model="client.name" label="Nombre de Empresa*"></v-text-field>
-                <v-text-field outlined type="number" v-model="client.phone" label="Teléfono"></v-text-field>
+                <v-text-field outlined dense prepend-inner-icon="mdi-domain" v-model="client.name" label="Nombre de Empresa*"></v-text-field>
+                <v-text-field outlined dense type="number" v-model="client.phone" label="Teléfono"></v-text-field>
             </v-col>
             <v-col cols="6">
-                <v-text-field outlined v-model="client.contact_mode" label="Medio de Contacto Preferido"></v-text-field>
-                <v-text-field outlined prepend-inner-icon="mdi-email" v-model="client.email" label="Correo Electrónico"></v-text-field>
+                <v-autocomplete outlined dense clearable v-model="selectedContactMode" :items="contactModes" label="Medio de Contacto Preferido" item-text="mode" item-value="id">
+                    <template slot="no-data" class="pa-2">No existen medios relacionados.</template>                      
+                </v-autocomplete>
+                <v-text-field outlined dense prepend-inner-icon="mdi-email" v-model="client.email" label="Correo Electrónico"></v-text-field>
             </v-col>
         </v-row>
         <v-card-text class="py-4 ma-0 pa-0" style="border-bottom:solid 1px grey;">
@@ -91,7 +93,7 @@
                     <v-text-field outlined class="mt-2" dense v-model="client.bank_account_number" label="Numero de Cuenta"></v-text-field>
                 </v-col>
                 <v-col cols="6">
-                    <v-autocomplete outlined class="mt-2" dense clearable v-model="client.payment_method_id" :items="methodLists" label="Método de Pago" item-text="method" item-value="id">
+                    <v-autocomplete outlined class="mt-2" dense clearable v-model="selectedPaymentMethod" :items="methodLists" label="Método de Pago" item-text="method" item-value="id">
                         <template slot="no-data" class="pa-2">No existen metodos relacionados.</template>                      
                     </v-autocomplete>
                 </v-col>
@@ -108,8 +110,8 @@
                 <v-card v-for="(b, index) in client.company_branches" :key="index" class="py-2 px-4 mr-3" style="width:50%;">
                     <v-row class="ma-0">
                         <strong>{{b.name}}</strong> 
-                        <v-spacer/>
-                        <v-icon @click="editBranch(b)" x-small>mdi-pencil</v-icon>
+                        <!--v-spacer/>
+                        <v-icon @click="editBranch(b)" x-small>mdi-pencil</v-icon-->
                     </v-row>
                     <span style="font-size:12px;">
                         <v-icon x-small>mdi-google-maps</v-icon>{{b.address}}
@@ -138,16 +140,16 @@
                                 </v-list-item-title>
                                 <v-list-item-subtitle>{{contact.job_position}}</v-list-item-subtitle>
                             </v-list-item-content>
-                            <v-list-item-action>
+                            <!--v-list-item-action>
                                 <div>
-                                    <v-btn icon class="mr-4" @click="deleteContact(contact.id)">
+                                    <v-btn icon class="mr-4" @click="deleteItem(contact.id)">
                                         <v-icon>mdi-delete</v-icon>
                                     </v-btn>
-                                    <v-btn icon @click="editContact(contact.id)">
+                                    <v-btn icon @click="editDialog=true, editedContact=contact">
                                         <v-icon>mdi-pencil</v-icon>
                                     </v-btn>
                                 </div>
-                            </v-list-item-action>
+                            </v-list-item-action-->
                         </v-list-item>
                     </v-list>
                     <v-divider></v-divider>
@@ -164,7 +166,35 @@
         </v-card-text>
         <v-row class="ma-0 mb-12">
             <v-spacer/>
-            <v-btn color="#5d267b" dark class="elevation-0" block>Guardar</v-btn>
+            <v-btn color="#5d267b" @click="save()" :loading="loader_button" :disabled="loader_button" dark class="elevation-0" block>Guardar</v-btn>
+            <v-spacer/>
+        </v-row>
+        <v-dialog v-model="editDialog" max-width="700px">
+          <editContact v-bind:contact="editedContact" @closeDialogEditContact="closeDialogEditContact"/>
+        </v-dialog>
+        <div class="text-center">
+            <v-bottom-sheet  v-model="sheet" inset>
+                <v-sheet class="text-center" height="150px">
+                    <div class="pt-6">
+                    ¿Seguro que deseas borrar este contacto?
+                    </div>
+                    <v-btn class="mt-4" text color="error" @click="deleteContact()">
+                    Eliminar
+                    </v-btn>
+                    <v-btn class="mt-4" text color="grey" @click="deleteId='', sheet=false">
+                    Cancelar
+                    </v-btn>
+                </v-sheet>
+            </v-bottom-sheet>
+        </div>
+        <v-snackbar :color="snackbar.color" v-model="snackbar.show">
+            {{ snackbar.message }}
+        </v-snackbar>
+    </v-container>
+    <v-container v-else>
+        <v-row class="mx-0 py-12 my-12">
+            <v-spacer/>
+            <v-progress-circular indeterminate color="#5d267b"></v-progress-circular>
             <v-spacer/>
         </v-row>
     </v-container>
@@ -187,6 +217,10 @@ export default {
     },
     data(){
         return{
+            editedContact:'',
+            contact:'',
+            editDialog: false,
+            loader_button:false,
             show_df:false,
             show_db:false,
             show_s:false,
@@ -203,10 +237,45 @@ export default {
                 zip:'',
                 state:'',
                 country:'MEX'
-            }
+            },
+            deleteId:'',
+            sheet: false,
+            snackbar: {
+                show: false,
+                message: null,
+                color: null
+            },
+        }
+    },
+    watch:{
+        currentUser:{
+            handler(){
+                this.apiCall()
+            }, deep: true
         }
     },
     computed:{
+        currentUser(){
+            return this.$store.state.currentUser.user
+        },
+        selectedPaymentMethod: {
+            get() {
+                return this.client.payment_method ? this.client.payment_method.id : null;
+            },
+            set(value) {
+                this.client.payment_method = this.client.payment_method || {};
+                this.client.payment_method.id = value;
+            }
+        },
+        selectedContactMode: {
+            get() {
+                return this.client.contact_mode ? this.client.contact_mode.id : null;
+            },
+            set(value) {
+                this.client.contact_mode = this.client.contact_mode || {};
+                this.client.contact_mode.id = value;
+            }
+        },
         liga(){
             return process.env.VUE_APP_BACKEND_ROUTE
         },
@@ -215,6 +284,9 @@ export default {
         },
         methodLists(){
             return this.$store.state.payment_method.payment_methods;
+        },
+        contactModes(){
+            return this.$store.state.contact_mode.contact_modes;
         },
         nosa(){
             if(this.client.razon_social!=undefined && (
@@ -236,21 +308,77 @@ export default {
         },
     },
     created(){
-        this.apiCall()
+        if(this.currentUser!=undefined){
+            this.apiCall()
+        }
         this.$store.dispatch('contact_mode/getContactModes')
         this.$store.dispatch('payment_method/getPaymentMethods')
     },
     methods:{
+        closeDialogEditContact: function(params) {
+            this.apiCall()
+        },
+        deleteItem (id) {
+            this.deleteId = id
+            this.sheet = true
+        },
+        deleteContact(){
+            axios.delete(process.env.VUE_APP_BACKEND_ROUTE + "api/v1/contact/delete/"+this.deleteId).then(response => {
+                this.client.contacts = this.client.contacts.filter(c=>c.id != this.deleteId)
+                this.deleteId = ''
+                this.sheet = false
+            }).catch(error => {
+                this.snackbar = {
+                    message: error.response.data.message,
+                    color: 'error',
+                    show: true
+                }
+            });
+        },
         apiCall () {
             this.loader = true
-            axios.get(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/companies?filter[id]=80").then(response => {
+            axios.get(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/companies?filter[id]="+this.currentUser.company_id).then(response => {
                 this.client = response.data.data.map(id=>{return{
                     ...id.attributes,
                     id:id.id
                 }})[0]
                 this.loader = false
+                this.editDialog = false;
             })
         },
+        save(){
+            const client = [this.client].map(id=>{return{
+                    id: id.id,
+                    name: id.name,
+                    phone: id.phone,
+                    email: id.email,
+                    rfc: id.rfc,
+                    bank_account_number: id.bank_account_number,
+                    razon_social: id.razon_social,
+                    contact_mode_id: id.contact_mode.id,
+                    payment_method_id: id.payment_method.id,
+                    cfdi_use: id.cfdi_use,
+                    fiscal_address_json: id.fiscal_address_json,
+                    tax_system: id.tax_system,
+                    fiscal_email: id.fiscal_email,
+            }})[0]
+            this.loader_button = true
+            axios.patch(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/companies/" + client.id,Object.assign(client)).then(response=>{
+                this.apiCall()
+                this.snackbar = {
+                    message: 'Cambio realizado con éxito',
+                    color: 'success',
+                    show: true
+                }
+            }).catch(error => {
+                this.loader_button = false
+                this.snackbar = {
+                    message: error.response.data.message,
+                    color: 'error',
+                    show: true
+                }
+            })
+        }
     }
 }
 </script>

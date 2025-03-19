@@ -24,7 +24,7 @@
             </v-row>
             <v-row class="ma-0" style="margin-top:-30px;">
                 <v-col :cols="liga=='https://backendmf.unocrm.mx/'?'3':'4'">
-                    <v-autocomplete outlined dense :disabled="quotation.company_id==''" v-model="quotation.company_branch_id" :items="branchesList" :loading="isLoadingBranch" :search-input.sync="searchBranch" hide-no-data item-value="id" item-text="name" label="Sucursal" placeholder="Escribe para buscar" attach>
+                    <v-autocomplete outlined dense v-model="quotation.company_branch_id" :items="branchesList" :loading="isLoadingBranch" :search-input.sync="searchBranch" hide-no-data item-value="id" item-text="name" label="Sucursal" placeholder="Escribe para buscar" attach><!--:disabled="quotation.company_id==''"-->
                         <template v-slot:item="{item, attrs, on}">
                             <v-list-item v-on="on" v-bind="attrs">
                                 <v-list-item-content>
@@ -67,15 +67,15 @@
                 </v-menu>
                 </v-col>
             </v-row>
-            <v-row class="px-2 ma-0 py-2" v-for="(item,k) in quotation.items" :key="k">
+            <v-row class="px-2 ma-0 py-2" v-for="(quotation_item,k) in quotation.items" :key="k">
                 <v-col ols="12" sm ="4" md="2" class="py-0 my-0">
-                    <v-text-field type=number v-model="item.quantity" label="Cantidad"></v-text-field>
+                    <v-text-field :suffix="quotation_item.item!=''?quotation_item.unit:''" type=number v-model="quotation_item.quantity" label="Cantidad"></v-text-field>
                 </v-col>
                 <v-col ols="12" sm ="8" md="6" class="py-0 my-0">
-                    <v-autocomplete v-if="item.item==''" item-text="key" v-model="item.item" item-value="id" label="Producto" clearable :items="productsList" :loading="isLoadingProducts" :search-input.sync="searchProducts" placeholder="Escribe para buscar o crear" hide-no-data>
+                    <v-autocomplete v-if="quotation_item.item==''" item-text="key" v-model="quotation_item.item" item-value="id" label="Producto" clearable :items="productsList" :loading="isLoadingProducts" :search-input.sync="searchProducts" placeholder="Escribe para buscar o crear" hide-no-data>
 
                         <template v-slot:item="{item, attrs, on}">
-                            <v-list-item v-on="on" v-bind="attrs" :disabled="item.inventory<=0">
+                            <v-list-item v-on="on" v-bind="attrs" @click="quotation_item.unit = item.unit!=null?item.unit.name:''" ><!--:disabled="item.inventory<=0"-->
                                 <v-list-item-content>
                                     <v-list-item-title>
                                         {{item.name}} <span v-if="liga!='https://backendmf.unocrm.mx/'">| {{(item.price*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</span>
@@ -96,27 +96,27 @@
                             </v-list-item>
                         </template> 
                     </v-autocomplete>
-                    <v-row v-else class="ma-0 py-3" style="border-bottom: 1px solid #8e8e8e;">{{productsList.filter(product=>product.id ==item.item).map(product=>product.name)[0]}}</v-row>
+                    <v-row v-else class="ma-0 py-3" style="border-bottom: 1px solid #8e8e8e;">{{productsList.filter(product=>product.id ==quotation_item.item).map(product=>product.name)[0]}}</v-row>
                 </v-col>
                 <v-col cols="12" sm ="8" md="3" class="py-0 my-0">
-                    <v-text-field disabled v-model="item.price" prefix="$" suffix="c/u" label="Precio"></v-text-field>
+                    <v-text-field disabled v-model="quotation_item.price" prefix="$" suffix="c/u" label="Precio"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm ="4" md="1">
                     <v-icon @click="remove(k)" v-show="k || ( !k && quotation.items.length > 1)" color="red">mdi-close</v-icon>
-                    <v-icon :disabled="item.item==''" @click="add(k)" v-show="k == quotation.items.length-1" color="primary">mdi-plus</v-icon>
+                    <v-icon :disabled="quotation_item.item==''" @click="add(k)" v-show="k == quotation.items.length-1" color="primary">mdi-plus</v-icon>
                 </v-col>
                 <div style="width:100%;" class="px-6">
                     <v-row class="ma-0">
                         <v-spacer/>
-                        <div style="text-align:center; line-height:0px; cursor:pointer;" @click="item.show_note = !item.show_note">
+                        <div style="text-align:center; line-height:0px; cursor:pointer;" @click="quotation_item.show_note = !quotation_item.show_note">
                             <span style="font-size:12px;">Agregar Nota</span>
                             <br/>
-                            <v-icon style="margin-top:5px;" v-if="!item.show_note">mdi-chevron-down</v-icon>
-                            <v-icon style="margin-top:5px;" v-if="item.show_note">mdi-chevron-up</v-icon>
+                            <v-icon style="margin-top:5px;" v-if="!quotation_item.show_note">mdi-chevron-down</v-icon>
+                            <v-icon style="margin-top:5px;" v-if="quotation_item.show_note">mdi-chevron-up</v-icon>
                         </div>
                         <v-spacer/>
                     </v-row>
-                    <v-textarea outlined v-if="item.show_note" v-model="item.client_note" label="Nota"></v-textarea>
+                    <v-textarea outlined v-if="quotation_item.show_note" v-model="quotation_item.client_note" label="Nota"></v-textarea>
                 </div>
             </v-row>
             <v-row class="ma-4 pa-4" style="background:#dddddd; border-radius:10px;">
@@ -129,6 +129,13 @@
                 <v-textarea class="mx-4" outlined v-model="quotation.client_note" label="Nota"></v-textarea>
             </div>
         </v-card>
+    </v-container>
+    <v-container v-else>
+        <v-row class="mx-0 py-12 my-12">
+            <v-spacer/>
+            <v-progress-circular indeterminate color="#5d267b"></v-progress-circular>
+            <v-spacer/>
+        </v-row>
     </v-container>
 </template>
 
@@ -245,6 +252,15 @@ export default {
         },
     },
     methods:{
+        apiCall(){
+            axios.get(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/companies?filter[id]="+this.currentUser.company_id).then(response => {
+                this.companyLists = response.data.data.map(id=>{return{
+                    ...id.attributes,
+                    id:id.id
+                }})
+                this.loader = false
+            })
+        },
         add(index) {
             this.quotation.items.push({ quantity: 1, item: '', price:'', show_note:false, client_note:''});
         },
@@ -303,6 +319,11 @@ export default {
             })
         },
     },
+    created(){
+        if(this.currentUser!=undefined){
+            this.apiCall()
+        }
+    },
     watch:{
         companyPercentage:{
             handler(){
@@ -341,9 +362,9 @@ export default {
             if (this.isLoadingContact) return
             this.isLoadingContact = true
             var filter = 'filter[company_id]=' + this.currentUser.company_id
-            for(var i=0; i<length; i++){
+            /*for(var i=0; i<length; i++){
                 filter = filter + 80
-            }
+            }*/
             axios.get(process.env.VUE_APP_BACKEND_ROUTE + 'api/v2/contact_p?' + filter + "filter[name]=" + val)
             .then(res => {
                 if(this.entries.contacts.length>0){
@@ -366,15 +387,11 @@ export default {
                 //}
             }).finally(() => (this.isLoadingBranch = false))
         },
-    },
-    created(){
-        axios.get(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/companies?filter[id]=80").then(response => {
-            this.companyLists = response.data.data.map(id=>{return{
-                ...id.attributes,
-                id:id.id
-            }})
-            this.loader = false
-        })
+        currentUser:{
+            handler(){
+                this.apiCall()
+            }, deep:true
+        }
     }
 }
 </script>
