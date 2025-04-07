@@ -35,6 +35,9 @@
             <template v-slot:[`item.company_id`]="{ item }">
                 <v-list-item class="px-0" style="min-height:0px!important; font-size:14px;" :to="{ path: '/clients/client/'+ item.companyID}">{{item.company_id}}</v-list-item>
             </template>
+            <template v-slot:[`item.status`]="{ item }">
+                <v-chip small :dark="true" :color="item.status=='Surtido'?'success':(item.status=='En Producción'?'#E53935':(item.status=='Pendiente'?'grey':''))">{{item.status}}</v-chip>
+            </template>
             <!-- Detalle PC -->
             <template v-slot:expanded-item="{ headers, item }">
                 <td :colspan="headers.length" class="pb-4">
@@ -119,6 +122,7 @@ export default {
     mounted(){
         Echo.channel('sales').listen('OrderInProduction', (e) => {
             console.log(e)
+            console.log('1')
             var updatedSale = this.sales.filter(sale=>sale.id == e[0])[0]
             if(updatedSale!=undefined){
                 this.sales.filter(sale=>sale.id == e)[0].is_in_production = true
@@ -126,6 +130,7 @@ export default {
         })
         Echo.channel('sales_dispatched').listen('OrderDispatched', (e) => {
             console.log(e)
+            console.log('2')
             var updatedSale = this.sales.filter(sale=>sale.id == e[0])[0]
             if(updatedSale!=undefined){
                 this.sales.filter(sale=>sale.id == e)[0].production_dispatched = true
@@ -153,6 +158,7 @@ export default {
             return [
             { text: '', value: 'data-table-expand' },
             { text: 'Folio', value: 'id' },
+            { text: 'production', value: 'production' },
             { text: 'Status', value: 'status' },
             { text: 'Fecha Programada', value: 'date' },
             { text: this.liga=='https://backendmf.unocrm.mx/'?'Comedor':'Sucursal', value: 'company_branch' },
@@ -181,14 +187,14 @@ export default {
                 var items = []
                 var total = 0
                 var link = ''
-                axios.get(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/sales?filter[company_id]=" + localStorage.getItem('user_company_id') + "&" + link + "page=" + page + "&itemsPerPage=" + itemsPerPage).then(response => {
+                axios.get(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/sales?filter[status]=pedido,pedido cliente,vendido&filter[company_id]=" + localStorage.getItem('user_company_id') + "&" + link + "page=" + page + "&itemsPerPage=" + itemsPerPage).then(response => {
                     this.salesLength = response.data.meta.total
                     items = this.mapSales(response.data.data)
                     total = response.data.meta.total
                     if (sortBy.length === 1 && sortDesc.length === 1) {
                         if(sortDesc[0]){
                             axios
-                            .get(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/sales?filter[company_id]=" + localStorage.getItem('user_company_id') + "&" + link + "page=" + page + "&sort=-" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
+                            .get(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/sales?filter[status]=pedido,pedido cliente,vendido&filter[company_id]=" + localStorage.getItem('user_company_id') + "&" + link + "page=" + page + "&sort=-" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
                             .then(response=>{
                                 items = this.mapSales(response.data.data)
                                 total = response.data.meta.total
@@ -199,7 +205,7 @@ export default {
                             })
                         }else{
                             axios
-                            .get(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/sales?filter[company_id]=" + localStorage.getItem('user_company_id') + "&" + link + "page=" + page + "&sort=" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
+                            .get(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/sales?filter[status]=pedido,pedido cliente,vendido&filter[company_id]=" + localStorage.getItem('user_company_id') + "&" + link + "page=" + page + "&sort=" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
                             .then(response=>{
                                 items = this.mapSales(response.data.data)
                                 total = response.data.meta.total
@@ -243,7 +249,7 @@ export default {
             sales = sales.map(id=>{
                 return{
                     purchase_order:id.purchase_order,
-                    production:id.production,
+                    status:id.production!=null?(id.production.is_completed?'Surtido':'En Producción'):'Pendiente',
                     datePicker: false,
                     id:id.id,
                     company_id: this.macro(id.company.attributes.macro) + this.nombre(id.company.attributes),

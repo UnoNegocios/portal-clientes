@@ -19,8 +19,6 @@
         <v-card class="mt-5">
             <v-row class="ma-0">
                 <v-card-title>Realiza tu Pedido</v-card-title>
-                <v-spacer/>
-                <v-btn class="elevation-0 ma-4" :loading="gris" @click="save()" dark color="#5d267b">Realizar Pedido</v-btn>
             </v-row>
             <v-row class="ma-0" style="margin-top:-30px;">
                 <v-col :cols="liga=='https://backendmf.unocrm.mx/'?'3':'4'">
@@ -128,7 +126,13 @@
                 <v-card-subtitle>Si no encontraste el producto que buscabas en nuestro catalogo, escribe aqui el producto y te lo conseguimos</v-card-subtitle>
                 <v-textarea class="mx-4" outlined v-model="quotation.client_note" label="Nota"></v-textarea>
             </div>
+            <div class="px-6 pb-8">
+                <v-btn class="elevation-0" block :loading="gris" :disabled="gris" @click="save()" :dark="!gris" color="#5d267b">Realizar Pedido</v-btn>
+            </div>
         </v-card>
+        <v-snackbar :color="snackbar.color" v-model="snackbar.show">
+            {{ snackbar.message }}
+        </v-snackbar>
     </v-container>
     <v-container v-else>
         <v-row class="mx-0 py-12 my-12">
@@ -285,8 +289,6 @@ export default {
                             bar:0,
                             purchase_order:'',
                             client_note:'',
-                            datePicker:'',
-                            datePicker2:'',
                             company_id:null,
                             contact_id:'',
                             items:[{
@@ -305,6 +307,11 @@ export default {
                             created_by_user_id:'',
                             last_updated_by_user_id:'',
                             company_branch_id:''
+                        }
+                        this.snackbar = {
+                            message: 'Pedido realizado con éxito',
+                            color: 'success',
+                            show: true
                         }
                         this.gris = false
                     })
