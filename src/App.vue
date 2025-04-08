@@ -113,6 +113,9 @@ export default {
     //localStorage.removeItem("session_token");
       this.token = null
     });
+    Echo.channel('test').listen('Test', (e) => {
+      console.log(e)
+    })
   },
 };
 </script>
