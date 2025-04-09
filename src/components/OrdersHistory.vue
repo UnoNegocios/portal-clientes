@@ -121,19 +121,17 @@ export default {
     },
     mounted(){
         Echo.channel('sales').listen('OrderInProduction', (e) => {
-            console.log(e)
-            console.log('1')
             var updatedSale = this.sales.filter(sale=>sale.id == e[0])[0]
             if(updatedSale!=undefined){
-                this.sales.filter(sale=>sale.id == e)[0].is_in_production = true
+                //this.sales.filter(sale=>sale.id == e)[0].is_in_production = true
+                this.sales.filter(sale=>sale.id == e)[0].status = 'En Producción'
             }
         })
         Echo.channel('sales_dispatched').listen('OrderDispatched', (e) => {
-            console.log(e)
-            console.log('2')
             var updatedSale = this.sales.filter(sale=>sale.id == e[0])[0]
             if(updatedSale!=undefined){
-                this.sales.filter(sale=>sale.id == e)[0].production_dispatched = true
+                //this.sales.filter(sale=>sale.id == e)[0].production_dispatched = true
+                this.sales.filter(sale=>sale.id == e)[0].status='Surtido'
             }
         })
     },
