@@ -119,7 +119,7 @@ export default {
             deep: true,
         },
     },
-    mounted(){
+    /*mounted(){
         Echo.channel('sales').listen('OrderInProduction', (e) => {
             var updatedSale = this.sales.filter(sale=>sale.id == e[0])[0]
             if(updatedSale!=undefined){
@@ -134,7 +134,7 @@ export default {
                 this.sales.filter(sale=>sale.id == e)[0].status='Surtido'
             }
         })
-    },
+    },*/
     computed: {
         liga(){
             return process.env.VUE_APP_BACKEND_ROUTE
