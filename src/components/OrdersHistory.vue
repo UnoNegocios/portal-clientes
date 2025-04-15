@@ -157,7 +157,7 @@ export default {
             { text: '', value: 'data-table-expand' },
             { text: 'Folio', value: 'id' },
             { text: 'production', value: 'production' },
-            { text: 'Status', value: 'status' },
+            //{ text: 'Status', value: 'status' },
             { text: 'Fecha Programada', value: 'date' },
             { text: this.liga=='https://backendmf.unocrm.mx/'?'Comedor':'Sucursal', value: 'company_branch' },
             { text: 'Orden de Compra', value: 'purchase_order' },
