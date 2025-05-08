@@ -35,6 +35,12 @@
             <template v-slot:[`item.company_id`]="{ item }">
                 <v-list-item class="px-0" style="min-height:0px!important; font-size:14px;" :to="{ path: '/clients/client/'+ item.companyID}">{{item.company_id}}</v-list-item>
             </template>
+
+            <template v-slot:[`item.facturapi_invoice`]="{ item }">
+                <v-btn v-if="item.facturapi_invoice!=null" rounded small color="primary" dark class="elevation-0" @click="downloadInvoice(item.facturapi_invoice)">{{'A-'+item.facturapi_invoice.folio_number}}</v-btn>
+            </template>
+
+
             <template v-slot:[`item.status`]="{ item }">
                 <v-chip small :dark="true" :color="item.status=='Surtido'?'success':(item.status=='En Producción'?'#E53935':(item.status=='Pendiente'?'grey':''))">{{item.status}}</v-chip>
             </template>
@@ -165,10 +171,47 @@ export default {
             { text: 'Fecha Factura', value: 'invoice_date' },
             { text: 'Fecha de Vencimiento', value: 'balance_due_date', sortable: false },
             { text: 'Fecha de Entrega', value: 'shipping_date', sortable: false },
-            { text: 'Factura', value: 'invoice', sortable: false },
+            { text: 'Factura', value: 'facturapi_invoice', sortable: false },
         ]},
     },
-    methods: { 
+    methods: {
+        downloadInvoice(invoice){
+            if(this.liga == 'https://backendmf.unocrm.mx/' || this.liga == 'http://127.0.0.1:8000/'){
+                let config = {
+                    responseType: 'arraybuffer',
+                    headers: {
+                        'Authorization': "Bearer " + localStorage.getItem("session_token"),
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/pdf'
+                    }
+                }
+                axios.post(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/custom-invoice/", { "invoice_id":invoice.facturapi_id}, config).then((response) => {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', invoice.uuid+ '.pdf'); //or any other extension
+                    document.body.appendChild(link);
+                    link.click();
+                })
+            }else{
+                let config = {
+                    responseType: 'arraybuffer',
+                    headers: {
+                        'Authorization': "Bearer " + process.env.VUE_APP_FACTURAPI_TOKEN,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/pdf'
+                    }
+                }
+                axios.get('https://www.facturapi.io/v2/invoices/' + invoice.facturapi_id + '/pdf', config).then((response) => {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', invoice.uuid+ '.pdf'); //or any other extension
+                    document.body.appendChild(link);
+                    link.click();
+                })
+            }
+        }, 
         getDataFromApi () {
             this.loading = true
             this.apiCall().then(data => {
@@ -288,6 +331,11 @@ export default {
                     invoice:id.invoice,
                     //remission:id.remission,
                     company_branch:id.company_branch,
+                    facturapi_invoice:id.facturapi_invoices != null
+                        ? id.facturapi_invoices
+                            .filter(fi => fi.type === 'I')
+                            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0]
+                        : null
                 }
             });
             return sales

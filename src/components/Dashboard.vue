@@ -358,7 +358,7 @@ export default {
             //if(this.search){
             if (this.isLoadingProducts) return
             this.isLoadingProducts = true
-            axios.get(process.env.VUE_APP_BACKEND_ROUTE + 'api/v2/item/pos?filter[pos]='+val)
+            axios.get(process.env.VUE_APP_BACKEND_ROUTE + 'api/v2/item/pos?filter[is_published]=1&filter[pos]='+val)
             .then(res => {
                 this.entries.products = this.entries.products.concat(res.data.data)
             }).finally(() => (this.isLoadingProducts = false, this.search = false))
