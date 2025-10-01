@@ -334,25 +334,42 @@ export default {
     watch:{
         companyPercentage:{
             handler(){
-                if(this.liga=='https://backendmf.unocrm.mx/'){
-                    this.client_percentage = this.companyLists.filter(company=>company.id == this.quotation.company_id).map(company=>company.price_list)[0].name.replace(/%/g,"")*1
-                    for(var i=0; i<this.quotation.items.length; i++){
-                        this.quotation.items[i].price = (((this.productsList.filter(item=>item.id == this.quotation.items[i].item).map(item=>item.cost)[0]/100)*(100+this.client_percentage))*1).toFixed(2)
-                        this.quotation.items[i].total_price = (((this.productsList.filter(item=>item.id == this.quotation.items[i].item).map(item=>item.cost)[0]/100)*(100+this.client_percentage))*this.quotation.items[i].quantity).toFixed(2)
-                    }
+                if(this.liga==='https://backendmf.unocrm.mx/'){
+                const pct = Number(
+                    this.companyLists
+                    .find(c => c.id === this.quotation.company_id)?.price_list?.name
+                    ?.replace('%','')
+                ) || 0
+                this.client_percentage = pct
+                for (let i = 0; i < this.quotation.items.length; i++) {
+                    const itemId = this.quotation.items[i].item
+                    const cost = Number(this.productsList.find(p => p.id === itemId)?.cost) || 0
+                    const qty  = Number(this.quotation.items[i].quantity) || 0
+                    const price = cost / (1 - pct/100)
+                    this.quotation.items[i].price       = price.toFixed(2)
+                    this.quotation.items[i].total_price = (price * qty).toFixed(2)
                 }
-            }, deep:true
+                }
+            }, 
+            deep:true
         },
         productTotal:{
             handler(){
-                if(this.liga=='https://backendmf.unocrm.mx/'){
-                    for(var i=0; i<this.quotation.items.length; i++){
-                        this.quotation.items[i].price = (((this.productsList.filter(item=>item.id == this.quotation.items[i].item).map(item=>item.cost)[0]/100)*(100+this.client_percentage))*1).toFixed(2)
-                        this.quotation.items[i].total_price = (((this.productsList.filter(item=>item.id == this.quotation.items[i].item).map(item=>item.cost)[0]/100)*(100+this.client_percentage))*this.quotation.items[i].quantity).toFixed(2)
+                if(this.liga==='https://backendmf.unocrm.mx/'){
+                    const pct = Number(this.client_percentage) || 0
+                    for (let i = 0; i < this.quotation.items.length; i++) {
+                        const itemId = this.quotation.items[i].item
+                        const cost = Number(this.productsList.find(p => p.id === itemId)?.cost) || 0
+                        const qty  = Number(this.quotation.items[i].quantity) || 0
+                        const price = cost / (1 - pct/100)
+                        this.quotation.items[i].price       = price.toFixed(2)
+                        this.quotation.items[i].total_price = (price * qty).toFixed(2)
                     }
                 }
-            }, deep:true
+            }, 
+            deep:true
         },
+
         searchProducts(val){
             //if (this.companyLists.length > 0) return
             //if(this.search){
