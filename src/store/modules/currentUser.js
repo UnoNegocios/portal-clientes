@@ -29,6 +29,9 @@ const actions = {
     }
     ).then(response => {
       commit("setUser", response.data);
+      if(!localStorage.getItem("user_company_id")){
+        localStorage.setItem("user_company_id", response.data.company_id);
+      }
     });
   },
   loginUser({state}, user) {

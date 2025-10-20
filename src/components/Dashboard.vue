@@ -327,14 +327,32 @@ export default {
       // Todo junto
       return branchOk && contactOk && dateOk && ocOk && hasAtLeastOne && allValid && this.formValid
     },
-
-    minDate(){
+    
+    minDate() {
+      // Hora actual *en Monterrey*
       const now = new Date();
-      const hour = now.getHours();
-      if (hour < 17) return now.toISOString().split('T')[0];
-      now.setDate(now.getDate() + 1);
-      return now.toISOString().split('T')[0];
+      const monterreyNow = new Date(
+        now.toLocaleString('en-US', { timeZone: 'America/Monterrey' })
+      );
+      const hour = monterreyNow.getHours(); // 0..23 en Monterrey
+
+      // Formateador de fecha YYYY-MM-DD en zona Monterrey
+      const fmt = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'America/Monterrey',
+        year: 'numeric', month: '2-digit', day: '2-digit'
+      });
+
+      if (hour > 17) {
+        // Antes de las 17:00 en Monterrey → “hoy” NO permitido → mínimo = mañana
+        const tomorrow = new Date(monterreyNow);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        return fmt.format(tomorrow); // 'YYYY-MM-DD'
+      } else {
+        // 17:00 o después → mínimo = hoy
+        return fmt.format(monterreyNow); // 'YYYY-MM-DD'
+      }
     },
+  
     totalQuotation(){
       let total = 0
       if(this.quotation.items.length){
