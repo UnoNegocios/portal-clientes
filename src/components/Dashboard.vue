@@ -117,14 +117,15 @@
               clearable
               :items="productsList"
               :loading="isLoadingProducts"
-              :search-input.sync="searchProducts"
+              :search-input.sync="quotation_item.search"
               placeholder="Escribe para buscar o crear"
               hide-no-data
               :rules="[rules.selected]"
-              @change="repriceItem(quotation_item)"
+              @update:search-input="queueProductSearch"
+              @change="onProductSelected(quotation_item, $event)"
             >
               <template v-slot:item="{item, attrs, on}">
-                <v-list-item v-on="on" v-bind="attrs" @click="quotation_item.unit = item.unit!=null?item.unit.name:''">
+                <v-list-item v-on="on" v-bind="attrs">
                   <v-list-item-content>
                     <v-list-item-title>
                       {{item.name}}
@@ -141,7 +142,7 @@
             </v-autocomplete>
 
             <v-row v-else class="ma-0 py-3" style="border-bottom: 1px solid #8e8e8e;">
-              {{productsList.filter(product=>product.id == quotation_item.item).map(product=>product.name)[0]}}
+              {{ quotation_item.item_name || productNameById(quotation_item.item) }}
             </v-row>
           </v-col>
 
@@ -235,6 +236,18 @@
 import axios from "axios"
 import dates from '../mixins/dates'
 
+const createQuotationItem = () => ({
+  quantity:1,
+  item:'',
+  item_cost:0,
+  item_name:'',
+  price:'',
+  search:'',
+  show_note:false,
+  client_note:'',
+  unit:''
+})
+
 export default {
   mixins: [dates],
   data(){
@@ -250,7 +263,7 @@ export default {
         client_note:'',
         company_id:null,
         contact_id:'',
-        items:[{ quantity:1, item:'', price:'', show_note:false, client_note:'' }],
+        items:[createQuotationItem()],
         status:'pedido',
         subtotal:'',
         date:'',
@@ -263,7 +276,11 @@ export default {
       },
       entries:{ products:[], contacts:[], branches:[] },
       isLoadingProducts:false,
-      searchProducts:null,
+      productSearchDebounce:null,
+      productSearchController:null,
+      productSearchRequestId:0,
+      latestProductSearch:'',
+      productSearchCache:{},
       client_percentage:0,
       isLoadingContact:false,
       searchContacts:null,
@@ -383,7 +400,15 @@ export default {
     branchesList(){ return this.entries.branches }
   },
   methods:{
+    createQuotationItem(){ return createQuotationItem() },
     roundPesos(n){ return Math.round(Number(n) || 0); },
+    normalizeProducts(products = []){
+      const uniqueProducts = new Map()
+      products.forEach(product => {
+        if (product?.id != null) uniqueProducts.set(product.id, product)
+      })
+      return Array.from(uniqueProducts.values())
+    },
     extractPct(priceList){
       if (!priceList) return 0
       const txt = typeof priceList === 'object' ? priceList.name : String(priceList)
@@ -396,7 +421,7 @@ export default {
       this.client_percentage = this.extractPct(company?.price_list)
     },
     repriceItem(it){
-      const cost = Number(this.productsList.find(p => p.id === it.item)?.cost) || 0
+      const cost = Number(it.item_cost) || Number(this.productsList.find(p => p.id === it.item)?.cost) || 0
       const qty  = Number(it.quantity) || 0
       const pct  = Number(this.client_percentage) || 0
       if (!cost){ it.price=''; return }
@@ -406,6 +431,112 @@ export default {
     },
     repriceAllItems(){
       this.quotation.items.forEach(it => { if (it.item) this.repriceItem(it) })
+    },
+    productNameById(productId){
+      return this.productsList.find(product => product.id === productId)?.name || ''
+    },
+    queueProductSearch(value){
+      clearTimeout(this.productSearchDebounce)
+      this.productSearchDebounce = setTimeout(() => {
+        this.fetchProducts(value)
+      }, 400)
+    },
+    async fetchProducts(value){
+      const query = String(value || '').trim()
+
+      if (!query) {
+        this.latestProductSearch = ''
+        this.entries.products = []
+        this.isLoadingProducts = false
+        if (this.productSearchController) {
+          this.productSearchController.abort()
+          this.productSearchController = null
+        }
+        return
+      }
+
+      if (query.length < 2) {
+        this.latestProductSearch = query
+        this.entries.products = []
+        this.isLoadingProducts = false
+        return
+      }
+
+      if (this.productSearchCache[query]) {
+        this.latestProductSearch = query
+        this.entries.products = this.productSearchCache[query]
+        this.isLoadingProducts = false
+        return
+      }
+
+      if (this.productSearchController) {
+        this.productSearchController.abort()
+      }
+
+      const requestId = ++this.productSearchRequestId
+      const controller = new AbortController()
+
+      this.productSearchController = controller
+      this.latestProductSearch = query
+      this.isLoadingProducts = true
+
+      try {
+        const res = await axios.get(
+          process.env.VUE_APP_BACKEND_ROUTE + 'api/v2/item/pos?filter[is_published]=1&filter[pos]=' + encodeURIComponent(query),
+          { signal: controller.signal }
+        )
+
+        if (requestId !== this.productSearchRequestId || query !== this.latestProductSearch) return
+
+        const products = this.normalizeProducts(res.data.data)
+        this.productSearchCache = { ...this.productSearchCache, [query]: products }
+        this.entries.products = products
+      } catch (error) {
+        if (error.code !== 'ERR_CANCELED' && error.name !== 'CanceledError') {
+          console.error('Error fetching products', error)
+        }
+      } finally {
+        if (requestId === this.productSearchRequestId) {
+          this.isLoadingProducts = false
+        }
+
+        if (this.productSearchController === controller) {
+          this.productSearchController = null
+        }
+      }
+    },
+    onProductSelected(quotationItem, selectedProductId){
+      if (!selectedProductId) {
+        quotationItem.item = ''
+        quotationItem.item_cost = 0
+        quotationItem.item_name = ''
+        quotationItem.price = ''
+        quotationItem.search = ''
+        quotationItem.unit = ''
+        return
+      }
+
+      const selectedProduct = this.productsList.find(product => product.id === selectedProductId)
+
+      quotationItem.item = selectedProductId
+      quotationItem.item_cost = Number(selectedProduct?.cost) || 0
+      quotationItem.item_name = selectedProduct?.name || ''
+      quotationItem.search = selectedProduct?.key || selectedProduct?.name || ''
+      quotationItem.unit = selectedProduct?.unit?.name || ''
+
+      this.repriceItem(quotationItem)
+    },
+    buildSalePayload(){
+      return {
+        ...this.quotation,
+        items: this.quotation.items.map(item => ({
+          quantity: item.quantity,
+          item: item.item,
+          price: item.price,
+          show_note: item.show_note,
+          client_note: item.client_note
+        }))
+      }
     },
 
     apiCall(){
@@ -417,7 +548,7 @@ export default {
           this.repriceAllItems()
         })
     },
-    add(){ this.quotation.items.push({ quantity:1, item:'', price:'', show_note:false, client_note:'' }) },
+    add(){ this.quotation.items.push(createQuotationItem()) },
     remove(index){ this.quotation.items.splice(index,1) },
     save(){
       // valida form UI
@@ -435,11 +566,11 @@ export default {
       this.quotation.payment_status = null
 
       this.$nextTick(() => {
-        axios.post(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/sales", Object.assign({}, this.quotation))
+        axios.post(process.env.VUE_APP_BACKEND_ROUTE + "api/v2/sales", this.buildSalePayload())
           .then(() => {
             this.quotation = {
               bar:0, purchase_order:'', client_note:'', company_id:null, contact_id:'',
-              items:[{ quantity:1, item:'', price:'', show_note:false, client_note:'' }],
+              items:[createQuotationItem()],
               status:'pedido', subtotal:'', date:'', iva:'', total:'', user_id:'',
               created_by_user_id:'', last_updated_by_user_id:'', company_branch_id:''
             }
@@ -455,6 +586,13 @@ export default {
   },
   created(){
     if(this.currentUser) this.apiCall()
+  },
+  beforeDestroy(){
+    clearTimeout(this.productSearchDebounce)
+
+    if (this.productSearchController) {
+      this.productSearchController.abort()
+    }
   },
   watch:{
     companyPercentage:{
@@ -473,13 +611,6 @@ export default {
         }
       },
       deep:true
-    },
-    searchProducts(val){
-      if (this.isLoadingProducts) return
-      this.isLoadingProducts = true
-      axios.get(process.env.VUE_APP_BACKEND_ROUTE + 'api/v2/item/pos?filter[is_published]=1&filter[pos]='+val)
-        .then(res => { this.entries.products = this.entries.products.concat(res.data.data) })
-        .finally(() => (this.isLoadingProducts = false))
     },
     searchContacts(val){
       if (this.isLoadingContact) return
