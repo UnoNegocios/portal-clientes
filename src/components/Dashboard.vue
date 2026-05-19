@@ -240,6 +240,7 @@ const createQuotationItem = () => ({
   quantity:1,
   item:'',
   item_cost:0,
+  cost:0,
   item_name:'',
   price:'',
   search:'',
@@ -509,6 +510,7 @@ export default {
       if (!selectedProductId) {
         quotationItem.item = ''
         quotationItem.item_cost = 0
+        quotationItem.cost = 0
         quotationItem.item_name = ''
         quotationItem.price = ''
         quotationItem.search = ''
@@ -520,6 +522,7 @@ export default {
 
       quotationItem.item = selectedProductId
       quotationItem.item_cost = Number(selectedProduct?.cost) || 0
+      quotationItem.cost = Number(selectedProduct?.cost) || 0
       quotationItem.item_name = selectedProduct?.name || ''
       quotationItem.search = selectedProduct?.key || selectedProduct?.name || ''
       quotationItem.unit = selectedProduct?.unit?.name || ''
